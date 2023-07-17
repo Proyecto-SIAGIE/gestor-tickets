@@ -1,7 +1,7 @@
 import { AutoMap } from "@automapper/classes";
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity('TICKET')
+@Entity('ticket')
 export class TicketEntity {
 
     @AutoMap()
