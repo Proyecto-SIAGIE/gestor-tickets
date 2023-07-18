@@ -4,13 +4,33 @@ import { userExternalRepository } from "../domain/userExternal.repository";
 import { Repository } from "typeorm";
 import { RoleEntity } from "src/role/domain/model/role.entity";
 import { ErrorManager } from "src/utils/errors/error.manager";
+import { TicketEntity } from "src/ticket/domain/model/ticket.entity";
 
 export class UserExternalImplRepository implements userExternalRepository {
     constructor(
         @InjectRepository(UserExternalEntity)
         private readonly userOrmRepository: Repository<UserExternalEntity>,
         @InjectRepository(RoleEntity)
-        private readonly roleOrmRepository: Repository<RoleEntity>,) { }
+        private readonly roleOrmRepository: Repository<RoleEntity>,
+        @InjectRepository(TicketEntity)
+        private readonly ticketOrmRepository: Repository<TicketEntity>,
+        ) { }
+    
+    
+    async createTicketByRequesterUserId(userId: number, ticket: TicketEntity): Promise<TicketEntity> {
+        const user = await this.findUserExternalById(userId);
+        if(!user){
+            throw new ErrorManager({
+                type: 'NOT_FOUND',
+                message: `User with Id ${userId} not found`
+            })
+        }
+
+        ticket.userExternal = user;
+        const ticketPreload = this.ticketOrmRepository.create(ticket);
+        const resultTicket = await this.ticketOrmRepository.save(ticketPreload);
+        return resultTicket;
+    }
 
     async assignRoleToUserExternal(roleId: number, userId: number): Promise<UserExternalEntity> {
         const user = await this.findUserExternalById(userId);

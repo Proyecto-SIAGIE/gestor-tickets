@@ -12,11 +12,12 @@ resourceToModel();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors();
+  
   app.useGlobalPipes(new ValidationPipe());
 
   const config = new DocumentBuilder()
     .setTitle('API Documentation')
-    .setDescription('API description')
+    .setDescription('Documentación de API del Proyecto SIAGIE')
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);

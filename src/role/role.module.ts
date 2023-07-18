@@ -8,11 +8,13 @@ import { RoleController } from './infrastructure/controller/role.controller';
 import { UserExternalImplService } from 'src/user-external/application/service/userExternalImpl.service';
 import { UserExternalImplRepository } from 'src/user-external/infrastructure/userExternalImpl.repository';
 import { UserExternalEntity } from 'src/user-external/domain/model/userExternal.entity';
+import { TicketEntity } from 'src/ticket/domain/model/ticket.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([RoleEntity]),
-    TypeOrmModule.forFeature([UserExternalEntity])
+    TypeOrmModule.forFeature([UserExternalEntity]),
+    TypeOrmModule.forFeature([TicketEntity])
   ],
   controllers: [RoleController],
   providers: [RoleImplService, 

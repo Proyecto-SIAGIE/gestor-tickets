@@ -6,6 +6,8 @@ import { mapper } from "src/utils/mapping/mapper";
 import { TicketEntity } from "src/ticket/domain/model/ticket.entity";
 import { TicketRequestDto } from "../dto/ticketReq.dto";
 import { ErrorManager } from "src/utils/errors/error.manager";
+import { UserExternalEntity } from "src/user-external/domain/model/userExternal.entity";
+import { UserExternalResponseDto } from "src/user-external/application/dto/userExternalRes.dto";
 
 @Injectable()
 export class TicketImplService implements TicketService {
@@ -32,8 +34,9 @@ export class TicketImplService implements TicketService {
                     message: `Ticket with ID ${id} not found`
                 })
             }
-            return mapper.map(responseTicket, TicketEntity, TicketResponseDto);
-
+            const ticket = mapper.map(responseTicket, TicketEntity, TicketResponseDto);
+            ticket.userExternalId = responseTicket.userExternal.id;
+            return ticket;
         } catch (error) {
             throw ErrorManager.createSignatureError(error.message)
         }

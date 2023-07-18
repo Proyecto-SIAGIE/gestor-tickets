@@ -1,5 +1,6 @@
 import { AutoMap } from "@automapper/classes";
 import { Expose } from "class-transformer";
+import { UserExternalResponseDto } from "src/user-external/application/dto/userExternalRes.dto";
 
 export class TicketResponseDto {
 
@@ -25,8 +26,8 @@ export class TicketResponseDto {
     subcategory3Id: number;
     
     @AutoMap()
-    userExternalId: number;
+    iieeId: number;
     
     @AutoMap()
-    iieeId: number;
+    userExternalId: number;
 }

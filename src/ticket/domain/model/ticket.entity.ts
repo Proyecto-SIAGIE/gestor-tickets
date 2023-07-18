@@ -1,5 +1,6 @@
 import { AutoMap } from "@automapper/classes";
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { UserExternalEntity } from "src/user-external/domain/model/userExternal.entity";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('ticket')
 export class TicketEntity {
@@ -46,14 +47,18 @@ export class TicketEntity {
     subcategory3Id: number;
 
     @AutoMap()
-    @Column('int',{
-        name: 'user_external_id'
-    })
-    userExternalId: number;
+    @ManyToOne(
+        () => UserExternalEntity,
+        ( userEntity ) => userEntity.tickets,
+    )
+    @JoinColumn({ name: 'user_external_id' })
+    userExternal: UserExternalEntity;
 
     @AutoMap()
     @Column('int',{
         name: 'iiee_id'
     })
     iieeId: number;
+
+
 }

@@ -5,11 +5,13 @@ import { UserExternalEntity } from './domain/model/userExternal.entity';
 import { UserExternalImplRepository } from './infrastructure/userExternalImpl.repository';
 import { UserExternalController } from './infrastructure/controller/userExternal.controller';
 import { RoleEntity } from 'src/role/domain/model/role.entity';
+import { TicketEntity } from 'src/ticket/domain/model/ticket.entity';
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([UserExternalEntity]),
-        TypeOrmModule.forFeature([RoleEntity])
+        TypeOrmModule.forFeature([RoleEntity]),
+        TypeOrmModule.forFeature([TicketEntity])
     ],
     controllers: [UserExternalController],
     providers: [UserExternalImplService, UserExternalImplRepository],

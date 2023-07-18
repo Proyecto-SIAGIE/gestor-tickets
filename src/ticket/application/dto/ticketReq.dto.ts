@@ -52,11 +52,5 @@ export class TicketRequestDto {
     @IsInt()
     @IsPositive()
     @AutoMap()
-    userExternalId: number;
-    
-    @ApiProperty()
-    @IsInt()
-    @IsPositive()
-    @AutoMap()
     iieeId: number;
 }

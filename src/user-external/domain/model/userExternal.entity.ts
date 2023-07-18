@@ -1,6 +1,7 @@
 import { AutoMap } from "@automapper/classes";
 import { RoleEntity } from "src/role/domain/model/role.entity";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { TicketEntity } from "src/ticket/domain/model/ticket.entity";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('user-external')
 export class UserExternalEntity{
@@ -57,4 +58,12 @@ export class UserExternalEntity{
     )
     @JoinColumn({ name: 'role_id' })
     role: RoleEntity
+
+    @OneToMany(
+        () => TicketEntity,
+        (ticketEntity) => ticketEntity.userExternal,
+        { cascade: true } 
+    )
+    tickets: TicketEntity[];
+
 }

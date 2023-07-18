@@ -1,3 +1,4 @@
+import { TicketEntity } from "src/ticket/domain/model/ticket.entity";
 import { UserExternalEntity } from "./model/userExternal.entity";
 
 export interface userExternalRepository{
@@ -10,4 +11,6 @@ export interface userExternalRepository{
     assignRoleToUserExternal(roleId: number, userId: number): Promise<UserExternalEntity>;
     unassignRoleToUserExternal(roleId: number, userId: number): Promise<UserExternalEntity>;
     listUserExternalsByRoleId(roleId: number): Promise<UserExternalEntity[]>;
+
+    createTicketByRequesterUserId(userId: number, ticket: TicketEntity): Promise<TicketEntity>;
 }

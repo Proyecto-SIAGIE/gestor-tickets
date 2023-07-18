@@ -4,6 +4,7 @@ https://docs.nestjs.com/controllers#controllers
 
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
+import { TicketRequestDto } from 'src/ticket/application/dto/ticketReq.dto';
 import { UserExternalRequestDto } from 'src/user-external/application/dto/userExternalReq.dto';
 import { UserExternalImplService } from 'src/user-external/application/service/userExternalImpl.service';
 
@@ -21,6 +22,11 @@ export class UserExternalController {
     @Post()
     async registerUser(@Body() createUser: UserExternalRequestDto){
         return await this.userService.registerUserExternal(createUser);
+    }
+
+    @Post(':id/tickets')
+    async createTicketByUserId(@Param('id',ParseIntPipe) id: number, @Body() createTicket: TicketRequestDto){
+        return await this.userService.createTicketByRequesterUserId(id,createTicket);
     }
 
     @Get()

@@ -11,10 +11,26 @@ import { mapper } from 'src/utils/mapping/mapper';
 import { UserExternalEntity } from 'src/user-external/domain/model/userExternal.entity';
 import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
 import { ErrorManager } from 'src/utils/errors/error.manager';
+import { TicketRequestDto } from 'src/ticket/application/dto/ticketReq.dto';
+import { TicketResponseDto } from 'src/ticket/application/dto/ticketRes.dto';
+import { TicketEntity } from 'src/ticket/domain/model/ticket.entity';
 
 @Injectable()
 export class UserExternalImplService implements UserExternalService {
     constructor(private readonly userRepository: UserExternalImplRepository) { }
+    
+    async createTicketByRequesterUserId(userId: number, ticket: TicketRequestDto): Promise<TicketResponseDto> {
+        try{
+
+            const ticketEntity = mapper.map(ticket, TicketRequestDto, TicketEntity);
+            const responseTicket = await this.userRepository.createTicketByRequesterUserId(userId,ticketEntity);
+            
+            return mapper.map(responseTicket, TicketEntity, TicketResponseDto);
+
+        }catch(error){
+            throw ErrorManager.createSignatureError(error.message)
+        }
+    }
     
     
     async assignRoleToUserExternal(roleId: number, userId: number): Promise<UserExternalResponseDto> {

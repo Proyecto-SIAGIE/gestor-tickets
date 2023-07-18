@@ -19,12 +19,13 @@ export class TicketImplRepository implements TicketRepository {
     }
 
     async findTicketById(id: number): Promise<TicketEntity> {
-        const ticket = this.ticketOrmRepository.findOneBy({ id: id });
+        const ticket = await this.ticketOrmRepository.findOne({where: {id: id}, relations:['userExternal']});
+        console.log(ticket)
         return ticket;
     }
 
     async listAllTickets(): Promise<TicketEntity[]> {
-        const tickets = this.ticketOrmRepository.find();
+        const tickets = await this.ticketOrmRepository.find();
         return tickets;
     }
 
