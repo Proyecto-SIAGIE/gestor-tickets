@@ -50,6 +50,7 @@ export class UserExternalEntity{
     })
     phoneExt: string;
 
+    //@AutoMap()
     @ManyToOne(
         () => RoleEntity,
         ( roleEntity ) => roleEntity.userExternals,

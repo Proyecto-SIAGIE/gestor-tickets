@@ -27,5 +27,6 @@ export class UserExternalResponseDto {
     @AutoMap()
     phoneExt: string;
     
+    //@AutoMap()
     role: RoleResponseDto
 }

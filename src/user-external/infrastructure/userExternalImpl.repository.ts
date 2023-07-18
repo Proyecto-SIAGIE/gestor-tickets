@@ -2,21 +2,69 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { UserExternalEntity } from "../domain/model/userExternal.entity";
 import { userExternalRepository } from "../domain/userExternal.repository";
 import { Repository } from "typeorm";
+import { RoleEntity } from "src/role/domain/model/role.entity";
+import { ErrorManager } from "src/utils/errors/error.manager";
 
 export class UserExternalImplRepository implements userExternalRepository {
     constructor(
         @InjectRepository(UserExternalEntity)
-        private readonly userOrmRepository: Repository<UserExternalEntity>) { }
+        private readonly userOrmRepository: Repository<UserExternalEntity>,
+        @InjectRepository(RoleEntity)
+        private readonly roleOrmRepository: Repository<RoleEntity>,) { }
+
+    async assignRoleToUserExternal(roleId: number, userId: number): Promise<UserExternalEntity> {
+        const user = await this.findUserExternalById(userId);
+        if (!user) return null;
+
+        const role = await this.roleOrmRepository.findOneBy({id: roleId});
+        if(!role) throw new ErrorManager({
+            type: 'NOT_FOUND',
+            message: `Role with Id ${roleId} not found`
+        })
+
+        const userPreload = await this.userOrmRepository.preload({
+            id: user.id,
+            role: role,
+            ...user
+        })
+        const userUpdated = await this.userOrmRepository.save(userPreload);
+        return userUpdated;
+    }
+
+    async unassignRoleToUserExternal(roleId: number, userId: number): Promise<UserExternalEntity> {
+        const user = await this.findUserExternalById(userId);
+        if (!user) return null;
+
+        const role = await this.roleOrmRepository.findOneBy({id: roleId});
+        if(!role) throw new ErrorManager({
+            type: 'NOT_FOUND',
+            message: `Role with Id ${roleId} not found`
+        })
+
+        const userPreload = await this.userOrmRepository.preload({
+            id: user.id,
+            role: null,
+            ...user
+        })
+        const userUpdated = await this.userOrmRepository.save(userPreload);
+        return userUpdated;
         
+    }
+
+    async listUserExternalsByRoleId(roleId: number): Promise<UserExternalEntity[]> {
+        const users = this.userOrmRepository.find({ where: { role: { id: roleId } } });
+        return users;
+    }
+
     async createUserExternal(user: UserExternalEntity): Promise<UserExternalEntity> {
         const userPreload = this.userOrmRepository.create(user);
         const resultUser = await this.userOrmRepository.save(userPreload);
         return resultUser;
     }
-    
+
     async updateUserExternalById(id: number, userRequest: UserExternalEntity): Promise<UserExternalEntity> {
         const user = await this.findUserExternalById(id);
-        if(!user) return null;
+        if (!user) return null;
         const userPreload = await this.userOrmRepository.preload({
             id: user.id,
             role: user.role,
@@ -25,19 +73,19 @@ export class UserExternalImplRepository implements userExternalRepository {
         const userUpdated = await this.userOrmRepository.save(userPreload);
         return userUpdated;
     }
-    
+
     async deleteUserExtenalById(id: number): Promise<UserExternalEntity> {
         const user = await this.findUserExternalById(id);
-        if(!user) return null;
+        if (!user) return null;
         const resultUser = await this.userOrmRepository.remove(user);
         return resultUser;
     }
-    
+
     async findUserExternalById(id: number): Promise<UserExternalEntity> {
         const user = this.userOrmRepository.findOneBy({ id: id });
         return user;
     }
-    
+
     async listAllUserExternals(): Promise<UserExternalEntity[]> {
         const users = this.userOrmRepository.find();
         return users;

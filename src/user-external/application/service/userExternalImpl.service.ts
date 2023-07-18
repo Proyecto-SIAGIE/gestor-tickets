@@ -15,6 +15,51 @@ import { ErrorManager } from 'src/utils/errors/error.manager';
 @Injectable()
 export class UserExternalImplService implements UserExternalService {
     constructor(private readonly userRepository: UserExternalImplRepository) { }
+    
+    
+    async assignRoleToUserExternal(roleId: number, userId: number): Promise<UserExternalResponseDto> {
+        try{
+            const responseUser = await this.userRepository.assignRoleToUserExternal(roleId,userId);
+            if(!responseUser) {
+                throw new ErrorManager({
+                    type: 'NOT_FOUND',
+                    message: `User-External with Id ${userId} not found`
+                })
+            }
+
+            return mapper.map(responseUser, UserExternalEntity, UserExternalResponseDto);
+
+        }catch(error){
+            throw ErrorManager.createSignatureError(error.message)
+        }
+
+    }
+    
+    async unassignRoleToUserExternal(roleId: number, userId: number): Promise<UserExternalResponseDto> {
+        try{
+            const responseUser = await this.userRepository.unassignRoleToUserExternal(roleId,userId);
+            if(!responseUser) {
+                throw new ErrorManager({
+                    type: 'NOT_FOUND',
+                    message: `User-External with Id ${userId} not found`
+                })
+            }
+            return mapper.map(responseUser, UserExternalEntity, UserExternalResponseDto);
+
+        }catch(error){
+            throw ErrorManager.createSignatureError(error.message)
+        }
+    }
+    
+    async listUserExternalsByRoleId(roleId: number): Promise<UserExternalResponseDto[]> {
+        const responseUsers = await this.userRepository.listUserExternalsByRoleId(roleId);
+
+        const users = responseUsers.map(responseUser =>
+            mapper.map(responseUser, UserExternalEntity, UserExternalResponseDto)
+        );
+
+        return users;
+    }
 
     async registerUserExternal(user: UserExternalRequestDto): Promise<UserExternalResponseDto> {
         try {
