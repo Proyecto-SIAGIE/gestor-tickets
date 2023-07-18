@@ -10,12 +10,15 @@ export class UserExternalEntity{
     id: number;
 
     @AutoMap()
-    @Column('varchar')
+    @Column('varchar',{
+        unique: true
+    })
     username: string;
 
     @AutoMap()
     @Column('varchar',{
-        length: 8
+        length: 8,
+        unique: true
     })
     dni: string;
 
@@ -24,11 +27,15 @@ export class UserExternalEntity{
     name: string;
 
     @AutoMap()
-    @Column('varchar')
+    @Column('varchar',{
+        name: 'last_name'
+    })
     lastName: string;
 
     @AutoMap()
-    @Column('varchar')
+    @Column('varchar',{
+        unique: true
+    })
     email: string;
 
     @AutoMap()
@@ -38,7 +45,9 @@ export class UserExternalEntity{
     phone: string;
 
     @AutoMap()
-    @Column('varchar')
+    @Column('varchar',{
+        name: 'phone_ext'
+    })
     phoneExt: string;
 
     @ManyToOne(

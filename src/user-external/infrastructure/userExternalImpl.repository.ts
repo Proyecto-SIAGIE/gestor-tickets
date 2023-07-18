@@ -16,6 +16,7 @@ export class UserExternalImplRepository implements userExternalRepository {
     
     async updateUserExternalById(id: number, userRequest: UserExternalEntity): Promise<UserExternalEntity> {
         const user = await this.findUserExternalById(id);
+        if(!user) return null;
         const userPreload = await this.userOrmRepository.preload({
             id: user.id,
             role: user.role,
@@ -27,6 +28,7 @@ export class UserExternalImplRepository implements userExternalRepository {
     
     async deleteUserExtenalById(id: number): Promise<UserExternalEntity> {
         const user = await this.findUserExternalById(id);
+        if(!user) return null;
         const resultUser = await this.userOrmRepository.remove(user);
         return resultUser;
     }

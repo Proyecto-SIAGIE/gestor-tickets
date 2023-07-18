@@ -1,3 +1,4 @@
+import { UserExternalController } from './user-external/infrastructure/controller/userExternal.controller';
 import { UserExternalImplService } from './user-external/application/service/userExternalImpl.service';
 import { UserExternalModule } from './user-external/userexternal.module';
 
@@ -18,4 +19,4 @@ import { RoleModule } from './role/role.module';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }
