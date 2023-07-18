@@ -1,6 +1,7 @@
 import { AutoMap } from "@automapper/classes";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsInt,
+    IsNotEmpty,
     IsPositive,
     IsString,
     Matches,
@@ -10,15 +11,16 @@ import { IsInt,
 export class TicketRequestDto {
     
     @ApiProperty()
-    @IsString()
-    @MinLength(1)
+    @IsNotEmpty()
     @MaxLength(500)
     @AutoMap()
     description: string;
 
     @ApiProperty()
-    @IsString()
-    @Matches(/^\d{8}$/)
+    //@IsString()
+    /*@MinLength(8, {
+        message: 'The DNI must have 8 digits',
+    })*/
     @AutoMap()
     studentDNI: string;
 

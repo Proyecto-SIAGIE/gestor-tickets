@@ -1,12 +1,14 @@
-/*
-https://docs.nestjs.com/modules
-*/
-
 import { Module } from '@nestjs/common';
+import { UserExternalImplService } from './application/service/userExternalImpl.service';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserExternalEntity } from './domain/model/userExternal.entity';
+import { UserExternalImplRepository } from './infrastructure/userExternalImpl.repository';
 
 @Module({
-    imports: [],
+    imports: [
+        TypeOrmModule.forFeature([UserExternalEntity])
+    ],
     controllers: [],
-    providers: [],
+    providers: [UserExternalImplService, UserExternalImplRepository],
 })
 export class UserExternalModule {}

@@ -1,3 +1,4 @@
+import { UserExternalImplService } from './user-external/application/service/userExternalImpl.service';
 import { UserExternalModule } from './user-external/userexternal.module';
 
 import { DatabaseModule } from './utils/database/database.module';
