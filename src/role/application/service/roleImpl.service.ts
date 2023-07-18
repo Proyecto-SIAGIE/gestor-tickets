@@ -9,7 +9,7 @@ import { RoleResponseDto } from '../dto/roleRes.dto';
 import { RoleImplRepository } from 'src/role/infrastructure/roleImpl.repository';
 import { mapper } from 'src/utils/mapping/mapper';
 import { RoleEntity } from 'src/role/domain/model/role.entity';
-import { ExceptionsHandler } from '@nestjs/core/exceptions/exceptions-handler';
+import { ErrorManager } from 'src/utils/errors/error.manager';
 
 @Injectable()
 export class RoleImplService implements RoleService {
@@ -24,28 +24,23 @@ export class RoleImplService implements RoleService {
             return mapper.map(responseRole, RoleEntity, RoleResponseDto);
 
         } catch (error) {
-            throw new ExceptionsHandler(error);
+            throw ErrorManager.createSignatureError(error.message)
         }
     }
 
     async findRoleById(id: number): Promise<RoleResponseDto> {
         try {
-
             const responseRole = await this.roleRepository.findRoleById(id);
             if (!responseRole) {
-                const notFoundError = new Error(`Role with ID ${id} not found`);
-                notFoundError.name = 'NotFoundError';
-                throw notFoundError;
+                throw new ErrorManager({
+                    type: 'NOT_FOUND',
+                    message: `Role with ID ${id} not found`
+                })
             }
-
             return mapper.map(responseRole, RoleEntity, RoleResponseDto);
 
         } catch (error) {
-            if (error.name === 'NotFoundError') {
-                throw new NotFoundException(error.message);
-            } else {
-                throw new InternalServerErrorException(error.message);
-            }
+            throw ErrorManager.createSignatureError(error.message)
         }
     }
 
@@ -57,6 +52,6 @@ export class RoleImplService implements RoleService {
             mapper.map(responseRole, RoleEntity, RoleResponseDto)
         );
 
-        return roles;    
+        return roles;
     }
 }

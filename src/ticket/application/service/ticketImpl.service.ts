@@ -5,7 +5,7 @@ import { TicketImplRepository } from "src/ticket/infrastructure/ticketImpl.repos
 import { mapper } from "src/utils/mapping/mapper";
 import { TicketEntity } from "src/ticket/domain/model/ticket.entity";
 import { TicketRequestDto } from "../dto/ticketReq.dto";
-import { ExceptionsHandler } from "@nestjs/core/exceptions/exceptions-handler";
+import { ErrorManager } from "src/utils/errors/error.manager";
 
 @Injectable()
 export class TicketImplService implements TicketService {
@@ -19,28 +19,23 @@ export class TicketImplService implements TicketService {
             return mapper.map(responseTicket, TicketEntity, TicketResponseDto);
 
         } catch (error) {
-            throw new ExceptionsHandler(error);
+            throw ErrorManager.createSignatureError(error.message)
         }
     }
 
     async findTicketById(id: number): Promise<TicketResponseDto> {
         try {
-
             const responseTicket = await this.ticketRepository.findTicketById(id);
             if (!responseTicket) {
-                const notFoundError = new Error(`Ticket with ID ${id} not found`);
-                notFoundError.name = 'NotFoundError';
-                throw notFoundError;
+                throw new ErrorManager({
+                    type: 'NOT_FOUND',
+                    message: `Ticket with ID ${id} not found`
+                })
             }
-
             return mapper.map(responseTicket, TicketEntity, TicketResponseDto);
 
         } catch (error) {
-            if (error.name === 'NotFoundError') {
-                throw new NotFoundException(error.message);
-            } else {
-                throw new InternalServerErrorException(error.message);
-            }
+            throw ErrorManager.createSignatureError(error.message)
         }
     }
 
