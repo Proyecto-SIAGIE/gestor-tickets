@@ -6,9 +6,12 @@ import { RoleEntity } from 'src/role/domain/model/role.entity';
 import { RoleResponseDto } from 'src/role/application/dto/roleRes.dto';
 import { UserExternalEntity } from 'src/user-external/domain/model/userExternal.entity';
 import { UserExternalResponseDto } from 'src/user-external/application/dto/userExternalRes.dto';
+import { UserOticEntity } from 'src/user-otic/domain/model/userOtic.entity';
+import { UserOticResponseDto } from 'src/user-otic/application/dto/userOticRes.dto';
 
 export const modelToResource = () =>{
     createMap(mapper, TicketEntity, TicketResponseDto);
     createMap(mapper, RoleEntity, RoleResponseDto);
-    createMap(mapper, UserExternalEntity, UserExternalResponseDto)
+    createMap(mapper, UserExternalEntity, UserExternalResponseDto);
+    createMap(mapper, UserOticEntity, UserOticResponseDto);
 }

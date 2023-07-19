@@ -1,7 +1,5 @@
-import { UserExternalController } from './user-external/infrastructure/controller/userExternal.controller';
-import { UserExternalImplService } from './user-external/application/service/userExternalImpl.service';
+import { UserOticModule } from './user-otic/userotic.module';
 import { UserExternalModule } from './user-external/userexternal.module';
-
 import { DatabaseModule } from './utils/database/database.module';
 import { TicketModule } from './ticket/ticket.module';
 import { Module } from '@nestjs/common';
@@ -10,6 +8,7 @@ import { RoleModule } from './role/role.module';
 
 @Module({
   imports: [
+    UserOticModule,
     UserExternalModule,
     ConfigModule.forRoot(),
     DatabaseModule,
@@ -19,4 +18,4 @@ import { RoleModule } from './role/role.module';
   controllers: [],
   providers: [],
 })
-export class AppModule { }
+export class AppModule {}
