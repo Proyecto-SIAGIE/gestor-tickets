@@ -36,6 +36,7 @@ export class TicketImplService implements TicketService {
             throw ErrorManager.createSignatureError(error.message)
         }
     }
+
     
     async registerFileByTicketId(ticketId: number, file: FileRequestDto): Promise<FileResponseDto> {
         try{

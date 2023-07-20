@@ -8,10 +8,12 @@ import { FileImplRepository } from 'src/file/infrastructure/fileImpl.repository'
 import { FileEntity } from 'src/file/domain/model/file.entity';
 import { NoteImplRepository } from 'src/notes/infrastructure/noteImpl.repository';
 import { NoteEntity } from 'src/notes/domain/model/note.entity';
+import { IieeEntity } from 'src/iiee/domain/model/iiee.entity';
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([TicketEntity]),
+        TypeOrmModule.forFeature([IieeEntity]),
         TypeOrmModule.forFeature([FileEntity]),
         TypeOrmModule.forFeature([NoteEntity]),
     ],

@@ -12,6 +12,8 @@ import { FileRequestDto } from 'src/file/application/dto/fileReq.dto';
 import { FileEntity } from 'src/file/domain/model/file.entity';
 import { NoteRequestDto } from 'src/notes/application/dto/noteReq.dto';
 import { NoteEntity } from 'src/notes/domain/model/note.entity';
+import { IieeRequestDto } from 'src/iiee/application/dto/iieeReq.dto';
+import { IieeEntity } from 'src/iiee/domain/model/iiee.entity';
 
 export const resourceToModel = () => {
     createMap(mapper, TicketRequestDto, TicketEntity);
@@ -20,4 +22,5 @@ export const resourceToModel = () => {
     createMap(mapper, UserOticRequestDto, UserOticEntity);
     createMap(mapper, FileRequestDto, FileEntity);
     createMap(mapper, NoteRequestDto, NoteEntity);
+    createMap(mapper, IieeRequestDto, IieeEntity);
 }
