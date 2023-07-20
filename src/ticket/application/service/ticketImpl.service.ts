@@ -8,10 +8,41 @@ import { TicketRequestDto } from "../dto/ticketReq.dto";
 import { ErrorManager } from "src/utils/errors/error.manager";
 import { UserExternalEntity } from "src/user-external/domain/model/userExternal.entity";
 import { UserExternalResponseDto } from "src/user-external/application/dto/userExternalRes.dto";
+import { FileRequestDto } from "src/file/application/dto/fileReq.dto";
+import { FileResponseDto } from "src/file/application/dto/fileRes.dto";
+import { FileImplRepository } from "src/file/infrastructure/fileImpl.repository";
+import { FileEntity } from "src/file/domain/model/file.entity";
 
 @Injectable()
 export class TicketImplService implements TicketService {
-    constructor(private readonly ticketRepository: TicketImplRepository) { }
+    constructor(private readonly ticketRepository: TicketImplRepository,
+        private readonly fileRepository: FileImplRepository) { }
+    
+    async registerFileByTicketId(ticketId: number, file: FileRequestDto): Promise<FileResponseDto> {
+        try{
+            const fileEntity = mapper.map(file, FileRequestDto, FileEntity);
+            const responseFile = await this.fileRepository.createFileByTicketId(ticketId, fileEntity);
+           
+            return mapper.map(responseFile, FileEntity, FileResponseDto);
+
+        }catch(error){
+            throw ErrorManager.createSignatureError(error.message)
+        }
+    }
+    
+    async findFilesByTicketId(ticketId: number): Promise<FileResponseDto[]> {
+        const responseFiles = await this.fileRepository.findFilesByTicketId(ticketId);
+
+        const files = responseFiles.map(responseFile =>
+            mapper.map(responseFile, FileEntity, FileResponseDto)
+        );
+
+        return files;
+    }
+    
+    async registerFileByNoteId(noteId: number, file: FileRequestDto): Promise<FileResponseDto> {
+        throw new Error("Method not implemented.");
+    }
 
     async registerTicket(ticket: TicketRequestDto): Promise<TicketResponseDto> {
         try {

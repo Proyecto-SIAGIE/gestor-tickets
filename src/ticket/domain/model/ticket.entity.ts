@@ -1,6 +1,7 @@
 import { AutoMap } from "@automapper/classes";
+import { FileEntity } from "src/file/domain/model/file.entity";
 import { UserExternalEntity } from "src/user-external/domain/model/userExternal.entity";
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('ticket')
 export class TicketEntity {
@@ -59,6 +60,13 @@ export class TicketEntity {
         name: 'iiee_id'
     })
     iieeId: number;
+
+    @OneToMany(
+        () => FileEntity,
+        (fileEntity) => fileEntity.ticket,
+        { cascade: true } 
+    )
+    files: FileEntity[];
 
 
 }

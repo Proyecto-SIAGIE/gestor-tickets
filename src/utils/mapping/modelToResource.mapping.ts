@@ -8,10 +8,13 @@ import { UserExternalEntity } from 'src/user-external/domain/model/userExternal.
 import { UserExternalResponseDto } from 'src/user-external/application/dto/userExternalRes.dto';
 import { UserOticEntity } from 'src/user-otic/domain/model/userOtic.entity';
 import { UserOticResponseDto } from 'src/user-otic/application/dto/userOticRes.dto';
+import { FileEntity } from 'src/file/domain/model/file.entity';
+import { FileResponseDto } from 'src/file/application/dto/fileRes.dto';
 
 export const modelToResource = () =>{
     createMap(mapper, TicketEntity, TicketResponseDto);
     createMap(mapper, RoleEntity, RoleResponseDto);
     createMap(mapper, UserExternalEntity, UserExternalResponseDto);
     createMap(mapper, UserOticEntity, UserOticResponseDto);
+    createMap(mapper, FileEntity, FileResponseDto);
 }

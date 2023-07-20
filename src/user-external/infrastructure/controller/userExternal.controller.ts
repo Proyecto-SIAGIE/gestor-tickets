@@ -10,7 +10,6 @@ import { UserExternalImplService } from 'src/user-external/application/service/u
 
 @ApiTags('user-externals')
 @Controller('user-externals')
-@Controller()
 export class UserExternalController {
     constructor(private readonly userService: UserExternalImplService){}
 
