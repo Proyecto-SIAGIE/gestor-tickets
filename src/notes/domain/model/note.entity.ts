@@ -42,6 +42,12 @@ export class NoteEntity {
     ticket: TicketEntity;
 
     @AutoMap()
+    @Column('int',{
+        name: 'ticket_id'
+    })
+    ticketId: number;
+
+    @AutoMap()
     @OneToMany(
         () => FileEntity,
         (FileEntity) => FileEntity.note,

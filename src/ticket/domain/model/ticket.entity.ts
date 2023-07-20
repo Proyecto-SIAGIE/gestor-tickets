@@ -57,6 +57,12 @@ export class TicketEntity {
     @JoinColumn({ name: 'user_external_id' })
     userExternal: UserExternalEntity;
 
+    @AutoMap()
+    @Column('int',{
+        name: 'user_external_id'
+    })
+    userExternalId: number;
+
     @OneToMany(
         () => FileEntity,
         (fileEntity) => fileEntity.ticket,
