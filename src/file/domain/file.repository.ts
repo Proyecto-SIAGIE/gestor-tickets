@@ -7,5 +7,6 @@ export interface FileRepository {
     deleteFileById(id: number): Promise<FileEntity>;
     findFileById(id: number):Promise<FileEntity | null>;
     findFilesByTicketId(ticketId: number):Promise<FileEntity[]>;
+    findFilesByNoteId(noteId: number):Promise<FileEntity[]>;
     listAllFiles():Promise<FileEntity[]>;
 }

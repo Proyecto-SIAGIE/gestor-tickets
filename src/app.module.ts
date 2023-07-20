@@ -1,3 +1,5 @@
+import { NoteImplService } from './notes/application/service/noteimpl.service';
+import { NoteModule } from './notes/note.module';
 import { FileImplService } from './file/application/service/fileimpl.service';
 import { FileModule } from './file/file.module';
 import { UserOticModule } from './user-otic/userotic.module';
@@ -10,6 +12,7 @@ import { RoleModule } from './role/role.module';
 
 @Module({
   imports: [
+    NoteModule,
     FileModule,
     UserOticModule,
     UserExternalModule,

@@ -10,11 +10,13 @@ import { FileImplService } from './application/service/fileimpl.service';
 import { FileImplRepository } from './infrastructure/fileImpl.repository';
 import { TicketImplRepository } from 'src/ticket/infrastructure/ticketImpl.repository';
 import { TicketEntity } from 'src/ticket/domain/model/ticket.entity';
+import { NoteEntity } from 'src/notes/domain/model/note.entity';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([FileEntity]),
     TypeOrmModule.forFeature([TicketEntity]),
+    TypeOrmModule.forFeature([NoteEntity]),
   ],
   controllers: [FileController],
   providers: [FileImplService, FileImplRepository],

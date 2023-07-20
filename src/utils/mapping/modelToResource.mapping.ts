@@ -10,6 +10,8 @@ import { UserOticEntity } from 'src/user-otic/domain/model/userOtic.entity';
 import { UserOticResponseDto } from 'src/user-otic/application/dto/userOticRes.dto';
 import { FileEntity } from 'src/file/domain/model/file.entity';
 import { FileResponseDto } from 'src/file/application/dto/fileRes.dto';
+import { NoteEntity } from 'src/notes/domain/model/note.entity';
+import { NoteResponseDto } from 'src/notes/application/dto/noteRes.dto';
 
 export const modelToResource = () =>{
     createMap(mapper, TicketEntity, TicketResponseDto);
@@ -17,4 +19,5 @@ export const modelToResource = () =>{
     createMap(mapper, UserExternalEntity, UserExternalResponseDto);
     createMap(mapper, UserOticEntity, UserOticResponseDto);
     createMap(mapper, FileEntity, FileResponseDto);
+    createMap(mapper, NoteEntity, NoteResponseDto);
 }

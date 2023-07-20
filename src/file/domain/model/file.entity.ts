@@ -1,4 +1,5 @@
 import { AutoMap } from "@automapper/classes";
+import { NoteEntity } from "src/notes/domain/model/note.entity";
 import { TicketEntity } from "src/ticket/domain/model/ticket.entity";
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
@@ -31,4 +32,11 @@ export class FileEntity {
     )
     @JoinColumn({ name: 'ticket_id' })
     ticket: TicketEntity;
+
+    @ManyToOne(
+        () => NoteEntity,
+        (noteEntity) => noteEntity.files,
+    )
+    @JoinColumn({ name: 'note_id' })
+    note: NoteEntity;
 }

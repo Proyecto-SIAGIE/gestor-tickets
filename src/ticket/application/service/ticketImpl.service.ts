@@ -12,11 +12,30 @@ import { FileRequestDto } from "src/file/application/dto/fileReq.dto";
 import { FileResponseDto } from "src/file/application/dto/fileRes.dto";
 import { FileImplRepository } from "src/file/infrastructure/fileImpl.repository";
 import { FileEntity } from "src/file/domain/model/file.entity";
+import { NoteRequestDto } from "src/notes/application/dto/noteReq.dto";
+import { NoteResponseDto } from "src/notes/application/dto/noteRes.dto";
+import { NoteEntity } from "src/notes/domain/model/note.entity";
+import { NoteImplRepository } from "src/notes/infrastructure/noteImpl.repository";
 
 @Injectable()
 export class TicketImplService implements TicketService {
     constructor(private readonly ticketRepository: TicketImplRepository,
-        private readonly fileRepository: FileImplRepository) { }
+        private readonly fileRepository: FileImplRepository,
+        private readonly noteRepository: NoteImplRepository,
+        ) { }
+    
+    
+    async registerNoteByTicketId(ticketId: number, note: NoteRequestDto): Promise<NoteResponseDto> {
+        try{
+            const noteEntity = mapper.map(note, NoteRequestDto, NoteEntity);
+            const responseNote = await this.noteRepository.createNoteByTicketId(ticketId, noteEntity);
+           
+            return mapper.map(responseNote, NoteEntity, NoteResponseDto);
+
+        }catch(error){
+            throw ErrorManager.createSignatureError(error.message)
+        }
+    }
     
     async registerFileByTicketId(ticketId: number, file: FileRequestDto): Promise<FileResponseDto> {
         try{
@@ -39,10 +58,18 @@ export class TicketImplService implements TicketService {
 
         return files;
     }
-    
-    async registerFileByNoteId(noteId: number, file: FileRequestDto): Promise<FileResponseDto> {
-        throw new Error("Method not implemented.");
+
+    async findNotesByTicketId(ticketId: number): Promise<NoteResponseDto[]> {
+        const responseNotes = await this.noteRepository.findNotesByTicketId(ticketId);
+
+        const notes = responseNotes.map(responseFile =>
+            mapper.map(responseFile, NoteEntity, NoteResponseDto)
+        );
+
+        return notes;
     }
+    
+    
 
     async registerTicket(ticket: TicketRequestDto): Promise<TicketResponseDto> {
         try {

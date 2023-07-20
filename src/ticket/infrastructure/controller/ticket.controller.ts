@@ -4,6 +4,7 @@ import { Body, Controller, Get, Param, ParseIntPipe, Post } from '@nestjs/common
 import { TicketImplService } from 'src/ticket/application/service/ticketImpl.service';
 import { TicketRequestDto } from 'src/ticket/application/dto/ticketReq.dto';
 import { FileRequestDto } from 'src/file/application/dto/fileReq.dto';
+import { NoteRequestDto } from 'src/notes/application/dto/noteReq.dto';
 
 
 @ApiTags('tickets')
@@ -26,9 +27,19 @@ export class TicketController {
         return await this.ticketService.registerFileByTicketId(id,createFile);
     }
 
+    @Post(':id/notes')
+    async registeNoteByTicketId(@Param('id',ParseIntPipe) id: number, @Body() createNote: NoteRequestDto){
+        return await this.ticketService.registerNoteByTicketId(id,createNote);
+    }
+
     @Get(':id/files')
     async listFilesByTicketId(@Param('id',ParseIntPipe) id: number){
         return await this.ticketService.findFilesByTicketId(id);
+    }
+
+    @Get(':id/notes')
+    async listNotesByTicketId(@Param('id',ParseIntPipe) id: number){
+        return await this.ticketService.findNotesByTicketId(id);
     }
 
     @Get()

@@ -4,6 +4,7 @@ import { FileEntity } from "../domain/model/file.entity";
 import { Repository } from "typeorm";
 import { TicketEntity } from "src/ticket/domain/model/ticket.entity";
 import { ErrorManager } from "src/utils/errors/error.manager";
+import { NoteEntity } from "src/notes/domain/model/note.entity";
 
 export class FileImplRepository implements FileRepository {
     constructor(
@@ -11,6 +12,8 @@ export class FileImplRepository implements FileRepository {
         private readonly fileOrmRepository: Repository<FileEntity>,
         @InjectRepository(TicketEntity)
         private readonly ticketOrmRepository: Repository<TicketEntity>,
+        @InjectRepository(NoteEntity)
+        private readonly noteOrmRepository: Repository<NoteEntity>,
     ){}
     
     async createFileByTicketId(ticketId: number, file: FileEntity): Promise<FileEntity> {
@@ -29,7 +32,18 @@ export class FileImplRepository implements FileRepository {
     }
     
     async createFileByNoteId(noteId: number, file: FileEntity): Promise<FileEntity> {
-        throw new Error("Method not implemented.");
+        const note = await this.noteOrmRepository.findOneBy({id: noteId});
+        if(!note){
+            throw new ErrorManager({
+                type: 'NOT_FOUND',
+                message: `Note with Id ${noteId} not found`
+            })
+        }
+
+        file.note = note;
+        const filePreload = this.fileOrmRepository.create(file);
+        const resultFile = await this.fileOrmRepository.save(filePreload);
+        return resultFile;
     }
 
     /*async createFile(file: FileEntity): Promise<FileEntity> {
@@ -59,13 +73,18 @@ export class FileImplRepository implements FileRepository {
     }
     
     async findFileById(id: number): Promise<FileEntity> {
-        const ticket = await this.fileOrmRepository.findOne({where: {id: id}, relations:['ticket']});
-        return ticket;
+        const file = await this.fileOrmRepository.findOne({where: {id: id}, relations:['ticket']});
+        return file;
     }
     
     async findFilesByTicketId(ticketId: number): Promise<FileEntity[]> {
-        const tickets = await this.fileOrmRepository.findBy({ticket:{id: ticketId}});
-        return tickets;
+        const files = await this.fileOrmRepository.findBy({ticket:{id: ticketId}});
+        return files;
+    }
+
+    async findFilesByNoteId(noteId: number): Promise<FileEntity[]> {
+        const files = await this.fileOrmRepository.findBy({note:{id: noteId}});
+        return files;
     }
     
     async listAllFiles(): Promise<FileEntity[]> {
