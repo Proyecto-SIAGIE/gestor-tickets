@@ -1,16 +1,15 @@
-import { TicketDetailController } from './ticket-detail/infrastructure/controller/ticketDetail.controller';
-import { TicketDetailImplService } from './ticket-detail/application/service/ticketdetailimpl.service';
-import { TickeDetailModule } from './ticket-detail/tickedetail.module';
-import { IieeModule } from './iiee/iiee.module';
-import { NoteModule } from './notes/note.module';
-import { FileModule } from './file/file.module';
-import { UserOticModule } from './user-otic/userotic.module';
-import { UserExternalModule } from './user-external/userexternal.module';
-import { DatabaseModule } from './utils/database/database.module';
-import { TicketModule } from './ticket/ticket.module';
+
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { RoleModule } from './role/role.module';
+import { FileModule } from './modules/file/file.module';
+import { IieeModule } from './modules/iiee/iiee.module';
+import { NoteModule } from './modules/notes/note.module';
+import { RoleModule } from './modules/role/role.module';
+import { TickeDetailModule } from './modules/ticket-detail/tickedetail.module';
+import { TicketModule } from './modules/ticket/ticket.module';
+import { UserExternalModule } from './modules/user-external/userexternal.module';
+import { UserOticModule } from './modules/user-otic/userotic.module';
+import { DatabaseModule } from './utils/database/database.module';
 
 @Module({
   imports: [
