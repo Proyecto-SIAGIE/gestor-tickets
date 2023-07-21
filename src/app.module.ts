@@ -1,5 +1,5 @@
 
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { FileModule } from './modules/file/file.module';
 import { IieeModule } from './modules/iiee/iiee.module';
@@ -10,6 +10,7 @@ import { TicketModule } from './modules/ticket/ticket.module';
 import { UserExternalModule } from './modules/user-external/userexternal.module';
 import { UserOticModule } from './modules/user-otic/userotic.module';
 import { DatabaseModule } from './utils/database/database.module';
+import { ApiTokenCheckMiddleware } from './common/middleware/apitokencheck.middleware';
 
 @Module({
   imports: [
@@ -19,7 +20,7 @@ import { DatabaseModule } from './utils/database/database.module';
     FileModule,
     UserOticModule,
     UserExternalModule,
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true }),
     DatabaseModule,
     TicketModule,
     RoleModule,
@@ -27,4 +28,10 @@ import { DatabaseModule } from './utils/database/database.module';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(ApiTokenCheckMiddleware)
+      .forRoutes({ path: '/*', method: RequestMethod.ALL });
+  }
+}
