@@ -16,6 +16,8 @@ import { UserExternalResponseDto } from 'src/modules/user-external/application/d
 import { UserExternalEntity } from 'src/modules/user-external/domain/model/userExternal.entity';
 import { UserOticResponseDto } from 'src/modules/user-otic/application/dto/userOticRes.dto';
 import { UserOticEntity } from 'src/modules/user-otic/domain/model/userOtic.entity';
+import { TagEntity } from 'src/modules/tag/domain/model/tag.entity';
+import { TagResponseDto } from 'src/modules/tag/application/dto/tagRes.dto';
 
 
 export const modelToResource = () =>{
@@ -27,4 +29,5 @@ export const modelToResource = () =>{
     createMap(mapper, NoteEntity, NoteResponseDto);
     createMap(mapper, IieeEntity, IieeResponseDto);
     createMap(mapper, TicketDetailEntity, TicketDetailResponseDto);
+    createMap(mapper, TagEntity, TagResponseDto);
 }

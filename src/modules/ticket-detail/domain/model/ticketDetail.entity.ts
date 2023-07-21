@@ -1,7 +1,8 @@
 import { AutoMap } from "@automapper/classes";
+import { TagEntity } from "src/modules/tag/domain/model/tag.entity";
 import { TicketEntity } from "src/modules/ticket/domain/model/ticket.entity";
 
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('ticket-detail')
 export class TicketDetailEntity {
@@ -94,4 +95,11 @@ export class TicketDetailEntity {
         name: 'ticket_id'
     })
     ticketId: number;
+
+    @ManyToOne(
+        () => TagEntity,
+        (tagEntity) => tagEntity.ticketDetails
+    )
+    @JoinColumn({name: 'tag_id'})
+    tag: TagEntity
 }

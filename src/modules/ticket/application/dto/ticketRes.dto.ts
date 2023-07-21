@@ -1,4 +1,5 @@
 import { AutoMap } from "@automapper/classes";
+import { TicketDetailResponseDto } from "src/modules/ticket-detail/application/dto/ticketDetailRes.dto";
 
 export class TicketResponseDto {
 
@@ -28,4 +29,7 @@ export class TicketResponseDto {
     
     @AutoMap()
     userExternalId: number;
+
+    @AutoMap()
+    ticketDetail: TicketDetailResponseDto;
 }

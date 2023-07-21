@@ -47,10 +47,5 @@ export class TicketRequestDto {
     @IsPositive()
     @AutoMap()
     subcategory3Id: number;
-    
-    @ApiProperty()
-    @IsInt()
-    @IsPositive()
-    @AutoMap()
-    iieeId: number;
+
 }
