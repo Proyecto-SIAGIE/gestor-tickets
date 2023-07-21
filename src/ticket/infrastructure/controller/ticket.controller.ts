@@ -1,10 +1,11 @@
 
 import { ApiTags } from '@nestjs/swagger';
-import { Body, Controller, Get, Param, ParseIntPipe, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
 import { TicketImplService } from 'src/ticket/application/service/ticketImpl.service';
 import { TicketRequestDto } from 'src/ticket/application/dto/ticketReq.dto';
 import { FileRequestDto } from 'src/file/application/dto/fileReq.dto';
 import { NoteRequestDto } from 'src/notes/application/dto/noteReq.dto';
+import { TicketDetailRequestDto } from 'src/ticket-detail/application/dto/ticketDetailReq.dto';
 
 
 @ApiTags('tickets')
@@ -47,5 +48,23 @@ export class TicketController {
         return await this.ticketService.listAllTickets();
     }
 
+    @Get(':id/ticketDetail')
+    async getTicketDetailByTicketId(@Param('id',ParseIntPipe) id: number){
+        return await this.ticketService.findTicketDetailByTicketId(id);
+    }
 
+    @Post(':id/TicketDetail')
+    async registerTicketDetailByTicketId(@Param('id',ParseIntPipe) id: number, @Body() createTicketDetail: TicketDetailRequestDto){
+        return await this.ticketService.registerTicketDetailByTicketId(id,createTicketDetail);
+    }
+
+    @Patch(':id/TicketDetail')
+    async updateTicketDetailById(@Param('id',ParseIntPipe) id: number, @Body() updateTd: TicketDetailRequestDto) {
+        return await this.ticketService.updateTicketDetailByTicketId(id,updateTd);
+    }
+
+    @Delete(':id/TicketDetail')
+    async deleteTicketDetailById(@Param('id',ParseIntPipe) id: number){
+        return await this.ticketService.deleteTicketDetailByTicketId(id);
+    }
 }

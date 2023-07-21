@@ -16,14 +16,19 @@ import { NoteRequestDto } from "src/notes/application/dto/noteReq.dto";
 import { NoteResponseDto } from "src/notes/application/dto/noteRes.dto";
 import { NoteEntity } from "src/notes/domain/model/note.entity";
 import { NoteImplRepository } from "src/notes/infrastructure/noteImpl.repository";
+import { TicketDetailResponseDto } from "src/ticket-detail/application/dto/ticketDetailRes.dto";
+import { TicketDetailImplRepository } from "src/ticket-detail/infrastructure/ticketDetailImpl.repository";
+import { TicketDetailEntity } from "src/ticket-detail/domain/model/ticketDetail.entity";
+import { TicketDetailRequestDto } from "src/ticket-detail/application/dto/ticketDetailReq.dto";
 
 @Injectable()
 export class TicketImplService implements TicketService {
+    
     constructor(private readonly ticketRepository: TicketImplRepository,
         private readonly fileRepository: FileImplRepository,
         private readonly noteRepository: NoteImplRepository,
+        private readonly ticketDetailRepository: TicketDetailImplRepository,
         ) { }
-    
     
     async registerNoteByTicketId(ticketId: number, note: NoteRequestDto): Promise<NoteResponseDto> {
         try{
@@ -109,6 +114,68 @@ export class TicketImplService implements TicketService {
         );
 
         return tickets;
+    }
+
+    async findTicketDetailByTicketId(ticketId: number): Promise<TicketDetailResponseDto> {
+        try{
+            const responseTd = await this.ticketDetailRepository.findTicketDetailByTicketId(ticketId);
+            if (!responseTd) {
+                throw new ErrorManager({
+                    type: 'NOT_FOUND',
+                    message: `Ticket-Detail with TicketId ${ticketId} not found`
+                })
+            }
+            return mapper.map(responseTd, TicketDetailEntity, TicketDetailResponseDto);
+        }catch(error){
+            throw ErrorManager.createSignatureError(error.message)
+        }
+    }
+
+    async registerTicketDetailByTicketId(ticketId: number, ticketDetail: TicketDetailRequestDto): Promise<TicketDetailResponseDto> {
+        try{
+            const ticketDetailEntity = mapper.map(ticketDetail, TicketDetailRequestDto, TicketDetailEntity);
+            const responseTd = await this.ticketDetailRepository.createTicketDetailByTicketId(ticketId, ticketDetailEntity);
+           
+            return mapper.map(responseTd, TicketDetailEntity, TicketDetailResponseDto);
+
+        }catch(error){
+            throw ErrorManager.createSignatureError(error.message)
+        }
+    }
+
+    async deleteTicketDetailByTicketId(id: number) {
+        try{
+            const responseTd = await this.ticketDetailRepository.deleteTicketDetailByTicketId(id);
+            if (!responseTd) {
+                throw new ErrorManager({
+                    type: 'NOT_FOUND',
+                    message: `Ticket-Detail with TicketId ${id} not found`
+                })
+            }
+           
+            return mapper.map(responseTd, TicketDetailEntity, TicketDetailResponseDto);
+
+        }catch(error){
+            throw ErrorManager.createSignatureError(error.message)
+        }
+    }
+    
+    async updateTicketDetailByTicketId(id: number, updateTd: TicketDetailRequestDto) {
+        try{
+            const ticketDetailEntity = mapper.map(updateTd, TicketDetailRequestDto, TicketDetailEntity);
+            const responseTd = await this.ticketDetailRepository.updateTicketDetailByTicketId(id, ticketDetailEntity);
+            if (!responseTd) {
+                throw new ErrorManager({
+                    type: 'NOT_FOUND',
+                    message: `Ticket-Detail with TicketId ${id} not found`
+                })
+            }
+           
+            return mapper.map(responseTd, TicketDetailEntity, TicketDetailResponseDto);
+
+        }catch(error){
+            throw ErrorManager.createSignatureError(error.message)
+        }
     }
 
 }

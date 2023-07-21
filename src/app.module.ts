@@ -1,3 +1,6 @@
+import { TicketDetailController } from './ticket-detail/infrastructure/controller/ticketDetail.controller';
+import { TicketDetailImplService } from './ticket-detail/application/service/ticketdetailimpl.service';
+import { TickeDetailModule } from './ticket-detail/tickedetail.module';
 import { IieeModule } from './iiee/iiee.module';
 import { NoteModule } from './notes/note.module';
 import { FileModule } from './file/file.module';
@@ -11,6 +14,7 @@ import { RoleModule } from './role/role.module';
 
 @Module({
   imports: [
+    TickeDetailModule,
     IieeModule,
     NoteModule,
     FileModule,

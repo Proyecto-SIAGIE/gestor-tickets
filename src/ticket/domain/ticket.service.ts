@@ -4,6 +4,8 @@ import { TicketResponseDto } from "../application/dto/ticketRes.dto";
 import { FileResponseDto } from "src/file/application/dto/fileRes.dto";
 import { NoteRequestDto } from "src/notes/application/dto/noteReq.dto";
 import { NoteResponseDto } from "src/notes/application/dto/noteRes.dto";
+import { TicketDetailRequestDto } from "src/ticket-detail/application/dto/ticketDetailReq.dto";
+import { TicketDetailResponseDto } from "src/ticket-detail/application/dto/ticketDetailRes.dto";
 
 export interface TicketService {
     registerTicket(ticket: TicketRequestDto): Promise<TicketResponseDto>;
@@ -15,4 +17,7 @@ export interface TicketService {
     findNotesByTicketId(ticketId: number):Promise<NoteResponseDto[]>;
 
     registerNoteByTicketId(ticketId: number, note: NoteRequestDto): Promise<NoteResponseDto>;
+    
+    registerTicketDetailByTicketId(ticketId: number, ticketDetail: TicketDetailRequestDto): Promise<TicketDetailResponseDto>;
+    findTicketDetailByTicketId(ticketId: number): Promise<TicketDetailResponseDto>;
 }

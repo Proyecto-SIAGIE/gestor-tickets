@@ -9,6 +9,8 @@ import { FileEntity } from 'src/file/domain/model/file.entity';
 import { NoteImplRepository } from 'src/notes/infrastructure/noteImpl.repository';
 import { NoteEntity } from 'src/notes/domain/model/note.entity';
 import { IieeEntity } from 'src/iiee/domain/model/iiee.entity';
+import { TicketDetailImplRepository } from 'src/ticket-detail/infrastructure/ticketDetailImpl.repository';
+import { TicketDetailEntity } from 'src/ticket-detail/domain/model/ticketDetail.entity';
 
 @Module({
     imports: [
@@ -16,8 +18,9 @@ import { IieeEntity } from 'src/iiee/domain/model/iiee.entity';
         TypeOrmModule.forFeature([IieeEntity]),
         TypeOrmModule.forFeature([FileEntity]),
         TypeOrmModule.forFeature([NoteEntity]),
+        TypeOrmModule.forFeature([TicketDetailEntity])
     ],
     controllers: [TicketController],
-    providers: [TicketImplService, TicketImplRepository, FileImplRepository, NoteImplRepository],
+    providers: [TicketImplService, TicketImplRepository, FileImplRepository, NoteImplRepository,TicketDetailImplRepository],
 })
 export class TicketModule {}

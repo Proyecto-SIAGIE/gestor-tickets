@@ -9,7 +9,9 @@ export class UserOticEntity {
     id: number;
 
     @AutoMap()
-    @Column('varchar')
+    @Column('varchar',{
+        unique: true
+    })
     username: string;
     
     @AutoMap()
