@@ -1,5 +1,5 @@
 
-import { ApiTags } from '@nestjs/swagger';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
 import { FileRequestDto } from 'src/modules/file/application/dto/fileReq.dto';
 import { NoteRequestDto } from 'src/modules/notes/application/dto/noteReq.dto';
@@ -12,6 +12,7 @@ import { TicketImplService } from '../../application/service/ticketImpl.service'
 export class TicketController {
   constructor(private readonly ticketService: TicketImplService) {}
 
+    @ApiOperation({ summary: 'Obtener un Ticket por Id' })
     @Get(':id')
     async findOneTicketById(@Param('id',ParseIntPipe) id: number){
         return await this.ticketService.findTicketById(id);
@@ -21,47 +22,55 @@ export class TicketController {
     async registerTicket(@Body() createTicket: TicketRequestDto){
         return await this.ticketService.registerTicket(createTicket);
     }*/
-
+    @ApiOperation({ summary: 'Registrar el File de un Ticket' })
     @Post(':id/files')
     async registerFileByTicketId(@Param('id',ParseIntPipe) id: number, @Body() createFile: FileRequestDto){
         return await this.ticketService.registerFileByTicketId(id,createFile);
     }
 
+    @ApiOperation({ summary: 'Registrar la Nota de un Ticket' })
     @Post(':id/notes')
     async registeNoteByTicketId(@Param('id',ParseIntPipe) id: number, @Body() createNote: NoteRequestDto){
         return await this.ticketService.registerNoteByTicketId(id,createNote);
     }
 
+    @ApiOperation({ summary: 'Obtener los Files de un Ticket (ticket-id)' })
     @Get(':id/files')
     async listFilesByTicketId(@Param('id',ParseIntPipe) id: number){
         return await this.ticketService.findFilesByTicketId(id);
     }
 
+    @ApiOperation({ summary: 'Obtener las Notas de un Ticket (ticket-id)' })
     @Get(':id/notes')
     async listNotesByTicketId(@Param('id',ParseIntPipe) id: number){
         return await this.ticketService.findNotesByTicketId(id);
     }
 
+    @ApiOperation({ summary: 'Obtener la lista de Tickets' })
     @Get()
     async listAllTickets(){
         return await this.ticketService.listAllTickets();
     }
 
+    @ApiOperation({ summary: 'Obtener el Ticket-Detail de un Ticket' })
     @Get(':id/ticketDetail')
     async getTicketDetailByTicketId(@Param('id',ParseIntPipe) id: number){
         return await this.ticketService.findTicketDetailByTicketId(id);
     }
 
+    @ApiOperation({ summary: 'Registrar el Ticket-Detail de un Ticket' })
     @Post(':id/TicketDetail')
     async registerTicketDetailByTicketId(@Param('id',ParseIntPipe) id: number, @Body() createTicketDetail: TicketDetailRequestDto){
         return await this.ticketService.registerTicketDetailByTicketId(id,createTicketDetail);
     }
 
+    @ApiOperation({ summary: 'Actualizar el Ticket-Detail de un Ticket' })
     @Patch(':id/TicketDetail')
     async updateTicketDetailById(@Param('id',ParseIntPipe) id: number, @Body() updateTd: TicketDetailRequestDto) {
         return await this.ticketService.updateTicketDetailByTicketId(id,updateTd);
     }
 
+    @ApiOperation({ summary: 'Eliminar el Ticket-Detail de un Ticket' })
     @Delete(':id/TicketDetail')
     async deleteTicketDetailById(@Param('id',ParseIntPipe) id: number){
         return await this.ticketService.deleteTicketDetailByTicketId(id);
