@@ -29,6 +29,7 @@ export class UserExternalController {
     @ApiOperation({ summary: 'Registrar un Ticket por User-External Id' })
     @Post(':id/tickets')
     async createTicketByUserId(@Param('id',ParseIntPipe) id: number, @Body() createTicket: TicketRequestDto){
+        //const glpiTicket = await this.glpiService.registerTicketWithoutFiles(createTicket)
         return await this.userService.createTicketByRequesterUserId(id,createTicket);
     }
 

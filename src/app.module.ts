@@ -1,6 +1,11 @@
 import { TagModule } from './modules/tag/tag.module';
 
-import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  NestModule,
+  RequestMethod,
+} from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { FileModule } from './modules/file/file.module';
 import { IieeModule } from './modules/iiee/iiee.module';
