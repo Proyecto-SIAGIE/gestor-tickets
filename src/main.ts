@@ -17,7 +17,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('API Documentation')
-    .setDescription('Documentación de API del Proyecto SIAGIE')
+    .setDescription('Documentación de API del Proyecto SIAGIE. Gestion de ticket.')
     .setVersion('1.0')
     .build();
   const document = SwaggerModule.createDocument(app, config);
