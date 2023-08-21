@@ -19,7 +19,7 @@ export class NoteEntity {
     techName: string;
 
     @AutoMap()
-    @Column('timestamp')
+    @Column('datetime')
     date: Date;
 
     @AutoMap()
@@ -29,7 +29,7 @@ export class NoteEntity {
     comment: string;
 
     @AutoMap()
-    @Column('bool')
+    @Column('bit')
     isPrivate: boolean;
 
     @AutoMap()

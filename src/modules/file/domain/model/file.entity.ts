@@ -16,11 +16,11 @@ export class FileEntity {
     name: string;
 
     @AutoMap()
-    @Column('double')
+    @Column('float')
     size: number;
 
     @AutoMap()
-    @Column('timestamp')
+    @Column('datetime')
     date: Date;
 
     @AutoMap()

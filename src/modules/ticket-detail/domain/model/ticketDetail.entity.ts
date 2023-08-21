@@ -12,11 +12,11 @@ export class TicketDetailEntity {
     id: number;
 
     @AutoMap()
-    @Column('timestamp')
+    @Column('datetime')
     date: Date;
 
     @AutoMap()
-    @Column('timestamp',{
+    @Column('datetime',{
         name:'date_mod'
     })
     dateMod: Date;
@@ -34,7 +34,7 @@ export class TicketDetailEntity {
     assignedTechName: string;
 
     @AutoMap()
-    @Column('timestamp',{
+    @Column('datetime',{
         nullable: true,
         name: 'solve_date'
     })

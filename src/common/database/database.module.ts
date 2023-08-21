@@ -17,7 +17,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
             username: process.env.DB_USERNAME,
             password: process.env.DB_PASSWORD,
             autoLoadEntities: true,
-            synchronize: true,
+            synchronize: !process.env.PRODUCTION,
+            options:{
+                trustServerCertificate: true,
+            }
             //connectionTimeout: +process.env.DB_CONNECTION_TIMEOUT,
             //connectTimeout: +process.env.DB_CONNECTION_TIMEOUT,
         }),
