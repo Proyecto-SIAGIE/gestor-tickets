@@ -10,7 +10,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     imports: [
         ConfigModule.forRoot(),
         TypeOrmModule.forRoot({
-            type: 'mysql',
+            type: 'mssql',
             host: process.env.DB_HOST,
             port: +process.env.DB_PORT,
             database: process.env.DB_NAME,
@@ -18,7 +18,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
             password: process.env.DB_PASSWORD,
             autoLoadEntities: true,
             synchronize: true,
-            connectTimeout: +process.env.DB_CONNECTION_TIMEOUT,
+            //connectionTimeout: +process.env.DB_CONNECTION_TIMEOUT,
+            //connectTimeout: +process.env.DB_CONNECTION_TIMEOUT,
         }),
     ],
     controllers: [],

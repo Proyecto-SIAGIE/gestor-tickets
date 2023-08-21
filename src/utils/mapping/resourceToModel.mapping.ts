@@ -17,7 +17,6 @@ import { UserExternalEntity } from 'src/modules/user-external/domain/model/userE
 import { UserOticRequestDto } from 'src/modules/user-otic/application/dto/userOticReq.dto';
 import { UserOticEntity } from 'src/modules/user-otic/domain/model/userOtic.entity';
 import { TagRequestDto } from 'src/modules/tag/application/dto/tagReq.dto';
-import { TagResponseDto } from 'src/modules/tag/application/dto/tagRes.dto';
 import { TagEntity } from 'src/modules/tag/domain/model/tag.entity';
 
 
