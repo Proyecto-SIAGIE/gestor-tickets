@@ -30,7 +30,7 @@ export class TicketImplRepository implements TicketRepository {
     }
 
     async findTicketById(id: number): Promise<TicketEntity> {
-        const ticket = await this.ticketOrmRepository.findOne({where: {id: id}, relations:['userExternal']});
+        const ticket = await this.ticketOrmRepository.findOne({where: {id: id}, relations:['userExternal','ticketDetail']});
         return ticket;
     }
 

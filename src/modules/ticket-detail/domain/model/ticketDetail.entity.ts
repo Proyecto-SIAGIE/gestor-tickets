@@ -86,7 +86,8 @@ export class TicketDetailEntity {
     usiStatus: number;
 
     @OneToOne(
-        () => TicketEntity
+        () => TicketEntity,
+        ticket => ticket.ticketDetail
     )
     @JoinColumn({name: 'ticket_id'})
     ticket: TicketEntity

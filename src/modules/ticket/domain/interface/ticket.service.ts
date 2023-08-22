@@ -8,6 +8,7 @@ import { TicketDetailResponseDto } from "src/modules/ticket-detail/application/d
 import { TicketRequestDto } from "../../application/dto/ticketReq.dto";
 import { TicketResponseDto } from "../../application/dto/ticketRes.dto";
 import { IGenericResponse, IPaginatedRequest, IPaginatedResponse } from "src/utils/generic";
+import { TicketGlpiReq } from "../../application/dto/ticketGlpiReq.dto";
 
 
 export interface TicketService {
@@ -23,4 +24,5 @@ export interface TicketService {
     
     registerTicketDetailByTicketId(ticketId: number, ticketDetail: TicketDetailRequestDto): Promise<IGenericResponse<TicketDetailResponseDto>>;
     findTicketDetailByTicketId(ticketId: number): Promise<IGenericResponse<TicketDetailResponseDto>>;
+    sendTicketToGlpi(content: TicketGlpiReq, files: Express.Multer.File[]): Promise<any>;
 }

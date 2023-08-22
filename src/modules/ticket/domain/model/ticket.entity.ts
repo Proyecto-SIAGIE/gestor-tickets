@@ -2,9 +2,10 @@ import { AutoMap } from "@automapper/classes";
 import { FileEntity } from "src/modules/file/domain/model/file.entity";
 import { IieeEntity } from "src/modules/iiee/domain/model/iiee.entity";
 import { NoteEntity } from "src/modules/notes/domain/model/note.entity";
+import { TicketDetailEntity } from "src/modules/ticket-detail/domain/model/ticketDetail.entity";
 import { UserExternalEntity } from "src/modules/user-external/domain/model/userExternal.entity";
 
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('ticket')
 export class TicketEntity {
@@ -58,11 +59,17 @@ export class TicketEntity {
     @JoinColumn({ name: 'user_external_id' })
     userExternal: UserExternalEntity;
 
-    @AutoMap()
+    @OneToOne(
+        () => TicketDetailEntity,
+        ticketDetail => ticketDetail.ticket,
+    )
+    ticketDetail: TicketDetailEntity
+
+    /*@AutoMap()
     @Column('int',{
         name: 'user_external_id'
     })
-    userExternalId: number;
+    userExternalId: number;*/
 
     @OneToMany(
         () => FileEntity,

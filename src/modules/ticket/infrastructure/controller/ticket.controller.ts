@@ -1,11 +1,13 @@
 
-import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query } from '@nestjs/common';
+import { ApiBody, ApiConsumes, ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query, UploadedFiles, UseInterceptors } from '@nestjs/common';
 import { FileRequestDto } from 'src/modules/file/application/dto/fileReq.dto';
 import { NoteRequestDto } from 'src/modules/notes/application/dto/noteReq.dto';
 import { TicketDetailRequestDto } from 'src/modules/ticket-detail/application/dto/ticketDetailReq.dto';
 import { TicketImplService } from '../../application/service/ticketImpl.service';
 import { IPaginatedRequest, sortOrder } from 'src/utils/generic';
+import { TicketGlpiReq } from '../../application/dto/ticketGlpiReq.dto';
+import { FilesInterceptor } from '@nestjs/platform-express';
 
 
 @ApiTags('tickets')
@@ -69,6 +71,15 @@ export class TicketController {
     @Post(':id/TicketDetail')
     async registerTicketDetailByTicketId(@Param('id',ParseIntPipe) id: number, @Body() createTicketDetail: TicketDetailRequestDto){
         return await this.ticketService.registerTicketDetailByTicketId(id,createTicketDetail);
+    }
+
+    @ApiOperation({ summary: 'Enviar su ticket a su registro en GLPI' })
+    @ApiConsumes('multipart/form-data') // Indica que se acepta la carga de archivos en la solicitud
+    @ApiBody({ type: TicketGlpiReq })
+    @UseInterceptors(FilesInterceptor('files'))
+    @Post('TicketToGLPI')
+    async registerTicketToGlpi(@Body() content: TicketGlpiReq, @UploadedFiles() files: Express.Multer.File[]){
+        return await this.ticketService.sendTicketToGlpi(content, files);
     }
 
     @ApiOperation({ summary: 'Actualizar el Ticket-Detail de un Ticket' })

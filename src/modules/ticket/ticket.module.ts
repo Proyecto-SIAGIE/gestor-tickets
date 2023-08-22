@@ -11,6 +11,10 @@ import { NoteEntity } from '../notes/domain/model/note.entity';
 import { NoteImplRepository } from '../notes/infrastructure/noteImpl.repository';
 import { TicketDetailEntity } from '../ticket-detail/domain/model/ticketDetail.entity';
 import { TicketDetailImplRepository } from '../ticket-detail/infrastructure/ticketDetailImpl.repository';
+import { UserExternalImplRepository } from '../user-external/infrastructure/userExternalImpl.repository';
+import { UserExternalEntity } from '../user-external/domain/model/userExternal.entity';
+import { RoleEntity } from '../role/domain/model/role.entity';
+import { IieeImplRepository } from '../iiee/infrastructure/iieeImpl.repository';
 
 
 @Module({
@@ -19,9 +23,18 @@ import { TicketDetailImplRepository } from '../ticket-detail/infrastructure/tick
         TypeOrmModule.forFeature([IieeEntity]),
         TypeOrmModule.forFeature([FileEntity]),
         TypeOrmModule.forFeature([NoteEntity]),
-        TypeOrmModule.forFeature([TicketDetailEntity])
+        TypeOrmModule.forFeature([TicketDetailEntity]),
+        TypeOrmModule.forFeature([UserExternalEntity]),
+        TypeOrmModule.forFeature([RoleEntity])
     ],
     controllers: [TicketController],
-    providers: [TicketImplService, TicketImplRepository, FileImplRepository, NoteImplRepository,TicketDetailImplRepository],
+    providers: [TicketImplService, 
+        TicketImplRepository, 
+        FileImplRepository, 
+        NoteImplRepository, 
+        TicketDetailImplRepository,
+        UserExternalImplRepository,
+        IieeImplRepository
+    ],
 })
-export class TicketModule {}
+export class TicketModule { }

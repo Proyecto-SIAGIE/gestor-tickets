@@ -4,6 +4,7 @@ import { IieeEntity } from "../domain/model/iiee.entity";
 import { Repository } from "typeorm";
 
 export class IieeImplRepository implements IieeRepository{
+    
     constructor(
         @InjectRepository(IieeEntity)
         private readonly iieeOrmRepository: Repository<IieeEntity>
@@ -36,6 +37,11 @@ export class IieeImplRepository implements IieeRepository{
     
     async findIieeById(id: number): Promise<IieeEntity> {
         const iiee = this.iieeOrmRepository.findOneBy({ id: id });
+        return iiee;
+    }
+
+    findIieeByModularCode(iieeModularCode: string) {
+        const iiee = this.iieeOrmRepository.findOneBy({ modularCode: iieeModularCode });
         return iiee;
     }
     

@@ -19,6 +19,12 @@ import { TicketService } from "../../domain/interface/ticket.service";
 import { TicketImplRepository } from "../../infrastructure/ticketImpl.repository";
 import { TicketResponseDto } from "../dto/ticketRes.dto";
 import { IGenericResponse, IPaginatedRequest, IPaginatedResponse } from "src/utils/generic";
+import { TicketGlpiReq } from "../dto/ticketGlpiReq.dto";
+import * as https from 'https';
+import * as FormData from 'form-data';
+import { UserExternalImplRepository } from "src/modules/user-external/infrastructure/userExternalImpl.repository";
+import { IieeImplRepository } from "src/modules/iiee/infrastructure/iieeImpl.repository";
+import axios from "axios";
 
 
 @Injectable()
@@ -28,6 +34,8 @@ export class TicketImplService implements TicketService {
         private readonly fileRepository: FileImplRepository,
         private readonly noteRepository: NoteImplRepository,
         private readonly ticketDetailRepository: TicketDetailImplRepository,
+        private readonly userExternalRepository: UserExternalImplRepository,
+        private readonly iieeRepository: IieeImplRepository
         ) { }
     
     async registerNoteByTicketId(ticketId: number, note: NoteRequestDto): Promise<IGenericResponse<NoteResponseDto>> {
@@ -242,4 +250,54 @@ export class TicketImplService implements TicketService {
         }
     }
 
+    async sendTicketToGlpi(content: TicketGlpiReq, files: Express.Multer.File[]): Promise<any> {
+        try{
+            const requestConfig = {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+                httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+            };
+
+            const user = await this.userExternalRepository.findUserExternalById(content.userId);
+            const ticket = await this.ticketRepository.findTicketById(content.ticketId);
+            const iiee = await this.iieeRepository.findIieeByModularCode(content.iieeModularCode);
+            
+            const ticketSimple = {
+                id: ticket.id,
+                description: ticket.description,
+                studentDNI: ticket.studentDNI,
+                categoryId: ticket.categoryId,
+                subcategory1Id: ticket.subcategory1Id,
+                subcategory2Id: ticket.subcategory2Id,
+                subcategory3Id: ticket.subcategory3Id,
+            };
+
+            const ticketDetailSimple = {
+                ticket: null,
+                ...ticket.ticketDetail,
+            }
+                
+
+            const thisForm = new FormData();
+            thisForm.append('userRequest', JSON.stringify(ticketSimple), { contentType: 'application/json' });
+            thisForm.append('ticketDetail', JSON.stringify(ticketSimple), { contentType: 'application/json' });
+           
+            thisForm.append('ticket', JSON.stringify(ticketSimple), { contentType: 'application/json' });
+            thisForm.append('iiee', JSON.stringify(ticketSimple), { contentType: 'application/json' });
+
+            for (let i = 0; i < files.length; i++) {
+                const el = files[i];
+                thisForm.append(`files[]`, el.buffer, el.originalname);
+            }
+
+            const response = await axios.post(`${process.env.MSA_GLPI_URL}/createTicketWithFiles`, thisForm, requestConfig);
+            console.log(response)
+            return response;
+        }catch(error){
+            console.log(error);
+            throw ErrorManager.createSignatureError(error.message)
+        }
+    }
+    
 }
