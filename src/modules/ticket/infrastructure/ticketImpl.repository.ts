@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { TicketEntity } from "../domain/model/ticket.entity";
-import { TicketRepository } from "../domain/ticket.repository";
+import { TicketRepository } from "../domain/interface/ticket.repository";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { ErrorManager } from "src/utils/errors/error.manager";
@@ -10,12 +10,17 @@ import { IieeEntity } from "src/modules/iiee/domain/model/iiee.entity";
 @Injectable()
 export class TicketImplRepository implements TicketRepository {
     
+    
     constructor(
         @InjectRepository(TicketEntity)
         private readonly ticketOrmRepository: Repository<TicketEntity>,
         @InjectRepository(IieeEntity)
         private readonly iieeOrmRepository: Repository<IieeEntity>
         ) { }
+
+    getOrmRepository() {
+        return this.ticketOrmRepository;
+    }
 
     async createTicket(ticket: TicketEntity): Promise<TicketEntity> {
 

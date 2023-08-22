@@ -1,4 +1,4 @@
-import { TicketEntity } from "./model/ticket.entity";
+import { TicketEntity } from "../model/ticket.entity";
 
 export interface TicketRepository {
     createTicket(ticket: TicketEntity): Promise<TicketEntity>;

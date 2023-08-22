@@ -1,4 +1,4 @@
-import { IieeEntity } from "./model/iiee.entity";
+import { IieeEntity } from "../model/iiee.entity";
 
 export interface IieeRepository {
     createIiee(iiee: IieeEntity): Promise<IieeEntity>;

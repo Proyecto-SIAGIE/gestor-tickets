@@ -16,12 +16,15 @@ import { TypeOrmModule } from '@nestjs/typeorm';
             database: process.env.DB_NAME,
             username: process.env.DB_USERNAME,
             password: process.env.DB_PASSWORD,
+            extra: {
+                instanceName: 'MSSQL' //quitar
+            },
             autoLoadEntities: true,
-            synchronize: !process.env.PRODUCTION,
-            options:{
+            synchronize: true,
+            options: {
                 trustServerCertificate: true,
-            }
-            //connectionTimeout: +process.env.DB_CONNECTION_TIMEOUT,
+            },
+            connectionTimeout: +process.env.DB_CONNECTION_TIMEOUT,
             //connectTimeout: +process.env.DB_CONNECTION_TIMEOUT,
         }),
     ],

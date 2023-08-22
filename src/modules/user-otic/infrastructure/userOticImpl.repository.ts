@@ -1,6 +1,6 @@
 import { InjectRepository } from "@nestjs/typeorm";
 import { UserOticEntity } from "../domain/model/userOtic.entity";
-import { UserOticRepository } from "../domain/userOtic.repository";
+import { UserOticRepository } from "../domain/interface/userOtic.repository";
 import { Repository } from "typeorm";
 
 export class UserOticImplRepository implements UserOticRepository {

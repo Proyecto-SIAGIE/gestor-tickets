@@ -1,12 +1,12 @@
 import { InjectRepository } from "@nestjs/typeorm";
-import { ITagRepository } from "../../domain/interface/itag.repository";
+import { TagRepository } from "../../domain/interface/tag.repository";
 import { TagEntity } from "../../domain/model/tag.entity";
 import { Repository } from "typeorm";
 import { TicketEntity } from "src/modules/ticket/domain/model/ticket.entity";
 import { TicketDetailEntity } from "src/modules/ticket-detail/domain/model/ticketDetail.entity";
 import { ErrorManager } from "src/utils/errors/error.manager";
 
-export class TagImplRepository implements ITagRepository {
+export class TagImplRepository implements TagRepository {
     constructor(
         @InjectRepository(TagEntity)
         private readonly tagOrmRepository: Repository<TagEntity>,

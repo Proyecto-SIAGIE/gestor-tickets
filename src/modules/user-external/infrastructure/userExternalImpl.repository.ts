@@ -1,6 +1,6 @@
 import { InjectRepository } from "@nestjs/typeorm";
 import { UserExternalEntity } from "../domain/model/userExternal.entity";
-import { userExternalRepository } from "../domain/userExternal.repository";
+import { userExternalRepository } from "../domain/interface/userExternal.repository";
 import { Repository } from "typeorm";
 import { ErrorManager } from "src/utils/errors/error.manager";
 import { RoleEntity } from "src/modules/role/domain/model/role.entity";

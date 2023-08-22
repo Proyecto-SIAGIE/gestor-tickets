@@ -7,7 +7,7 @@ import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { TicketRequestDto } from 'src/modules/ticket/application/dto/ticketReq.dto';
 import { UserExternalRequestDto } from '../../application/dto/userExternalReq.dto';
 import { UserExternalImplService } from '../../application/service/userExternalImpl.service';
-import { IPaginatedRequest, sortOrder} from 'src/utils/interface/generic';
+import { IPaginatedRequest, sortOrder} from 'src/utils/generic';
 
 
 @ApiTags('user-externals')
@@ -34,7 +34,7 @@ export class UserExternalController {
         return await this.userService.createTicketByRequesterUserId(id,createTicket);
     }
 
-    @ApiOperation({ summary: 'Obtener la lista de User-Externals' })
+    /*@ApiOperation({ summary: 'Obtener la lista de User-Externals' })
     @ApiQuery({ name: 'page', type: Number, required: true })
     @ApiQuery({ name: 'size', type: Number, required: true })
     @ApiQuery({ name: 'sortBy', type: String, required: true })
@@ -42,7 +42,7 @@ export class UserExternalController {
     @Get()
     async listAllUserExternals(@Query() filter: IPaginatedRequest){
         return await this.userService.listAllUserExternals(filter);
-    }
+    }*/
 
     @ApiOperation({ summary: 'Actualizar un User-External por Id' })
     @Patch(':id')

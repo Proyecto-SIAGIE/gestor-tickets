@@ -1,5 +1,5 @@
 import { InjectRepository } from '@nestjs/typeorm';
-import { TicketDetailRepository } from '../domain/ticketDetail.repository';
+import { TicketDetailRepository } from '../domain/interface/ticketDetail.repository';
 import { TicketDetailEntity } from '../domain/model/ticketDetail.entity';
 import { Repository } from 'typeorm';
 import { ErrorManager } from 'src/utils/errors/error.manager';

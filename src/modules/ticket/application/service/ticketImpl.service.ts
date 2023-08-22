@@ -15,10 +15,10 @@ import { TicketDetailResponseDto } from "src/modules/ticket-detail/application/d
 import { TicketDetailEntity } from "src/modules/ticket-detail/domain/model/ticketDetail.entity";
 import { TicketDetailImplRepository } from "src/modules/ticket-detail/infrastructure/ticketDetailImpl.repository";
 import { TicketEntity } from "../../domain/model/ticket.entity";
-import { TicketService } from "../../domain/ticket.service";
+import { TicketService } from "../../domain/interface/ticket.service";
 import { TicketImplRepository } from "../../infrastructure/ticketImpl.repository";
 import { TicketResponseDto } from "../dto/ticketRes.dto";
-import { IGenericResponse } from "src/utils/interface/generic";
+import { IGenericResponse, IPaginatedRequest, IPaginatedResponse } from "src/utils/generic";
 
 
 @Injectable()
@@ -30,12 +30,19 @@ export class TicketImplService implements TicketService {
         private readonly ticketDetailRepository: TicketDetailImplRepository,
         ) { }
     
-    async registerNoteByTicketId(ticketId: number, note: NoteRequestDto): Promise<NoteResponseDto> {
+    async registerNoteByTicketId(ticketId: number, note: NoteRequestDto): Promise<IGenericResponse<NoteResponseDto>> {
         try{
             const noteEntity = mapper.map(note, NoteRequestDto, NoteEntity);
             const responseNote = await this.noteRepository.createNoteByTicketId(ticketId, noteEntity);
            
-            return mapper.map(responseNote, NoteEntity, NoteResponseDto);
+            const mapNote = mapper.map(responseNote, NoteEntity, NoteResponseDto);
+
+            return {
+                success: true,
+                code: HttpStatus.OK,
+                data: mapNote,
+                messages:[]
+            }
 
         }catch(error){
             throw ErrorManager.createSignatureError(error.message)
@@ -43,12 +50,19 @@ export class TicketImplService implements TicketService {
     }
 
     
-    async registerFileByTicketId(ticketId: number, file: FileRequestDto): Promise<FileResponseDto> {
+    async registerFileByTicketId(ticketId: number, file: FileRequestDto): Promise<IGenericResponse<FileResponseDto>> {
         try{
             const fileEntity = mapper.map(file, FileRequestDto, FileEntity);
             const responseFile = await this.fileRepository.createFileByTicketId(ticketId, fileEntity);
            
-            return mapper.map(responseFile, FileEntity, FileResponseDto);
+            const mapFile = mapper.map(responseFile, FileEntity, FileResponseDto);
+
+            return {
+                success: true,
+                code: HttpStatus.OK,
+                data: mapFile,
+                messages:[]
+            }
 
         }catch(error){
             throw ErrorManager.createSignatureError(error.message)
@@ -95,7 +109,7 @@ export class TicketImplService implements TicketService {
         }
     }
 
-    async findTicketById(id: number): Promise<TicketResponseDto> {
+    async findTicketById(id: number): Promise<IGenericResponse<TicketResponseDto>> {
         try {
             const responseTicket = await this.ticketRepository.findTicketById(id);
             if (!responseTicket) {
@@ -104,25 +118,54 @@ export class TicketImplService implements TicketService {
                     message: `Ticket with ID ${id} not found`
                 })
             }
-            const ticket = mapper.map(responseTicket, TicketEntity, TicketResponseDto);
-            ticket.userExternalId = responseTicket.userExternal.id;
-            return ticket;
+            const mapTicket = mapper.map(responseTicket, TicketEntity, TicketResponseDto);
+            mapTicket.userExternalId = responseTicket.userExternal.id;
+            return {
+                success: true,
+                code: HttpStatus.OK,
+                data: mapTicket,
+                messages: ['Successfully ticket found']
+            };
         } catch (error) {
             throw ErrorManager.createSignatureError(error.message)
         }
     }
 
-    async listAllTickets(): Promise<TicketResponseDto[]> {
-        const responseTickets = await this.ticketRepository.listAllTickets();
+    async listAllTickets(filter: IPaginatedRequest): Promise<IPaginatedResponse<TicketResponseDto>> {
+        //const responseTickets = await this.ticketRepository.listAllTickets();
 
+        const queryBuilder = this.ticketRepository.getOrmRepository().createQueryBuilder("ticket");
+
+        queryBuilder
+        .orderBy("ticket."+filter.sortBy, filter.sortOrder)
+        .skip(Math.max(0,(filter.page - 1) * filter.size))
+        .take(filter.size);
+
+        const itemCount = await queryBuilder.getCount();
+        const { entities: responseTickets} = await queryBuilder.getRawAndEntities();
+       
         const tickets = responseTickets.map(responseTicket =>
             mapper.map(responseTicket, TicketEntity, TicketResponseDto)
         );
 
-        return tickets;
+        const fullTickets = await Promise.all(
+            tickets.map(async (rp) => {
+              const td = await this.ticketDetailRepository.findTicketDetailByTicketId(rp.id);
+              rp.ticketDetail = mapper.map(td, TicketDetailEntity, TicketDetailResponseDto);
+              return rp;
+            }),
+        );
+
+        return {
+            page: filter.page,
+            recordsTotal: itemCount,
+            size: filter.size,
+            success: true,
+            items: fullTickets
+        };
     }
 
-    async findTicketDetailByTicketId(ticketId: number): Promise<TicketDetailResponseDto> {
+    async findTicketDetailByTicketId(ticketId: number): Promise<IGenericResponse<TicketDetailResponseDto>> {
         try{
             const responseTd = await this.ticketDetailRepository.findTicketDetailByTicketId(ticketId);
             if (!responseTd) {
@@ -131,18 +174,33 @@ export class TicketImplService implements TicketService {
                     message: `Ticket-Detail with TicketId ${ticketId} not found`
                 })
             }
-            return mapper.map(responseTd, TicketDetailEntity, TicketDetailResponseDto);
+
+            const mapTd = mapper.map(responseTd, TicketDetailEntity, TicketDetailResponseDto);
+
+            return {
+                success: true,
+                code: HttpStatus.OK,
+                data: mapTd,
+                messages:[]
+            }
         }catch(error){
             throw ErrorManager.createSignatureError(error.message)
         }
     }
 
-    async registerTicketDetailByTicketId(ticketId: number, ticketDetail: TicketDetailRequestDto): Promise<TicketDetailResponseDto> {
+    async registerTicketDetailByTicketId(ticketId: number, ticketDetail: TicketDetailRequestDto): Promise<IGenericResponse<TicketDetailResponseDto>> {
         try{
             const ticketDetailEntity = mapper.map(ticketDetail, TicketDetailRequestDto, TicketDetailEntity);
             const responseTd = await this.ticketDetailRepository.createTicketDetailByTicketId(ticketId, ticketDetailEntity);
            
-            return mapper.map(responseTd, TicketDetailEntity, TicketDetailResponseDto);
+            const mapTd = mapper.map(responseTd, TicketDetailEntity, TicketDetailResponseDto);
+
+            return {
+                success: true,
+                code: HttpStatus.OK,
+                data: mapTd,
+                messages: []
+            }
 
         }catch(error){
             throw ErrorManager.createSignatureError(error.message)

@@ -1,10 +1,11 @@
 
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query } from '@nestjs/common';
 import { FileRequestDto } from 'src/modules/file/application/dto/fileReq.dto';
 import { NoteRequestDto } from 'src/modules/notes/application/dto/noteReq.dto';
 import { TicketDetailRequestDto } from 'src/modules/ticket-detail/application/dto/ticketDetailReq.dto';
 import { TicketImplService } from '../../application/service/ticketImpl.service';
+import { IPaginatedRequest, sortOrder } from 'src/utils/generic';
 
 
 @ApiTags('tickets')
@@ -47,9 +48,15 @@ export class TicketController {
     }
 
     @ApiOperation({ summary: 'Obtener la lista de Tickets' })
+    @ApiQuery({ name: 'page', type: Number, required: true })
+    @ApiQuery({ name: 'size', type: Number, required: true })
+    @ApiQuery({ name: 'sortBy', type: String, required: false })
+    @ApiQuery({ name: 'sortOrder', enum: sortOrder, required: false })
     @Get()
-    async listAllTickets(){
-        return await this.ticketService.listAllTickets();
+    async listAllTickets(@Query() filter: IPaginatedRequest){
+        if(!filter.sortBy) filter.sortBy = 'id';
+        
+        return await this.ticketService.listAllTickets(filter);
     }
 
     @ApiOperation({ summary: 'Obtener el Ticket-Detail de un Ticket' })

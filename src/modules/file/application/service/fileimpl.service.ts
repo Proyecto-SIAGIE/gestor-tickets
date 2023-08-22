@@ -7,10 +7,10 @@ import { FileRequestDto } from '../dto/fileReq.dto';
 import { FileResponseDto } from '../dto/fileRes.dto';
 import { mapper } from 'src/utils/mapping/mapper';
 import { ErrorManager } from 'src/utils/errors/error.manager';
-import { FileService } from '../../domain/file.service';
+import { FileService } from '../../domain/interface/file.service';
 import { FileEntity } from '../../domain/model/file.entity';
 import { FileImplRepository } from '../../infrastructure/fileImpl.repository';
-import { IGenericResponse } from 'src/utils/interface/generic';
+import { IGenericResponse } from 'src/utils/generic';
 
 
 

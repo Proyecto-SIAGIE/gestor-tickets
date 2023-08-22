@@ -2,33 +2,41 @@
 https://docs.nestjs.com/providers#services
 */
 
-import { Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
+import { HttpStatus, Injectable, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { RoleRequestDto } from '../dto/roleReq.dto';
 import { RoleResponseDto } from '../dto/roleRes.dto';
 import { mapper } from 'src/utils/mapping/mapper';
 import { ErrorManager } from 'src/utils/errors/error.manager';
 import { RoleEntity } from '../../domain/model/role.entity';
-import { RoleService } from '../../domain/role.service';
+import { RoleService } from '../../domain/interface/role.service';
 import { RoleImplRepository } from '../../infrastructure/roleImpl.repository';
+import { IGenericResponse } from 'src/utils/generic';
 
 @Injectable()
 export class RoleImplService implements RoleService {
     constructor(private readonly roleRepository: RoleImplRepository) { }
 
-    async registerRole(role: RoleRequestDto): Promise<RoleResponseDto> {
+    async registerRole(role: RoleRequestDto): Promise<IGenericResponse<RoleResponseDto>> {
         try {
             const roleEntity = mapper.map(role, RoleRequestDto, RoleEntity);
 
             const responseRole = await this.roleRepository.createRole(roleEntity);
 
-            return mapper.map(responseRole, RoleEntity, RoleResponseDto);
+            const mapRole = mapper.map(responseRole, RoleEntity, RoleResponseDto);
+            
+            return {
+                success: true,
+                code: HttpStatus.OK,
+                data: mapRole,
+                messages: []
+            }
 
         } catch (error) {
             throw ErrorManager.createSignatureError(error.message)
         }
     }
 
-    async findRoleById(id: number): Promise<RoleResponseDto> {
+    async findRoleById(id: number): Promise<IGenericResponse<RoleResponseDto>> {
         try {
             const responseRole = await this.roleRepository.findRoleById(id);
             if (!responseRole) {
@@ -37,7 +45,14 @@ export class RoleImplService implements RoleService {
                     message: `Role with ID ${id} not found`
                 })
             }
-            return mapper.map(responseRole, RoleEntity, RoleResponseDto);
+            
+            const mapRole = mapper.map(responseRole, RoleEntity, RoleResponseDto);
+            return {
+                success: true,
+                code: HttpStatus.OK,
+                data: mapRole,
+                messages: []
+            }
 
         } catch (error) {
             throw ErrorManager.createSignatureError(error.message)

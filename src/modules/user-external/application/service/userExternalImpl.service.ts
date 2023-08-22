@@ -11,9 +11,9 @@ import { TicketRequestDto } from 'src/modules/ticket/application/dto/ticketReq.d
 import { TicketResponseDto } from 'src/modules/ticket/application/dto/ticketRes.dto';
 import { TicketEntity } from 'src/modules/ticket/domain/model/ticket.entity';
 import { UserExternalEntity } from '../../domain/model/userExternal.entity';
-import { UserExternalService } from '../../domain/userExternal.service';
+import { UserExternalService } from '../../domain/interface/userExternal.service';
 import { UserExternalImplRepository } from '../../infrastructure/userExternalImpl.repository';
-import { IGenericResponse, IPaginatedRequest, IPaginatedResponse } from 'src/utils/interface/generic';
+import { IGenericResponse, IPaginatedRequest, IPaginatedResponse } from 'src/utils/generic';
 
 
 @Injectable()

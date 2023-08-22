@@ -2,17 +2,18 @@
 https://docs.nestjs.com/providers#services
 */
 
-import { Injectable } from "@nestjs/common";
+import { HttpStatus, Injectable } from "@nestjs/common";
 import { TicketResponseDto } from "src/modules/ticket/application/dto/ticketRes.dto";
 import { TicketEntity } from "src/modules/ticket/domain/model/ticket.entity";
 import { TicketImplRepository } from "src/modules/ticket/infrastructure/ticketImpl.repository";
 import { ErrorManager } from "src/utils/errors/error.manager";
 import { mapper } from "src/utils/mapping/mapper";
-import { IieeService } from "../../domain/iiee.service";
+import { IieeService } from "../../domain/interface/iiee.service";
 import { IieeEntity } from "../../domain/model/iiee.entity";
 import { IieeImplRepository } from "../../infrastructure/iieeImpl.repository";
 import { IieeRequestDto } from "../dto/iieeReq.dto";
 import { IieeResponseDto } from "../dto/iieeRes.dto";
+import { IGenericResponse } from "src/utils/generic";
 
 
 
@@ -23,20 +24,27 @@ export class IieeImplService implements IieeService {
         private readonly ticketRepository: TicketImplRepository) {}
     
     
-    async registerIiee(iiee: IieeRequestDto): Promise<IieeResponseDto> {
+    async registerIiee(iiee: IieeRequestDto): Promise<IGenericResponse<IieeResponseDto>> {
         try {
             const iieeEntity = mapper.map(iiee, IieeRequestDto, IieeEntity);
 
             const responseIiee = await this.iieeRepository.createIiee(iieeEntity);
 
-            return mapper.map(responseIiee, IieeEntity, IieeResponseDto);
+            const mapIe = mapper.map(responseIiee, IieeEntity, IieeResponseDto);
+
+            return {
+                success: true,
+                code: HttpStatus.OK,
+                data: mapIe,
+                messages:[]
+            }
 
         } catch (error) {
             throw ErrorManager.createSignatureError(error.message)
         }
     }
     
-    async updateIieeById(id: number, iieeRequest: IieeRequestDto): Promise<IieeResponseDto> {
+    async updateIieeById(id: number, iieeRequest: IieeRequestDto): Promise<IGenericResponse<IieeResponseDto>> {
         try{
             const iieeEntity = mapper.map(iieeRequest, IieeRequestDto, IieeEntity);
             const responseIiee = await this.iieeRepository.updateIieeById(id, iieeEntity);
@@ -46,13 +54,20 @@ export class IieeImplService implements IieeService {
                     message: `IIEE with Id ${id} not found`
                 })
             }
-            return mapper.map(responseIiee, IieeEntity, IieeResponseDto);
+            
+            const mapIe = mapper.map(responseIiee, IieeEntity, IieeResponseDto);
+            return {
+                success: true,
+                code: HttpStatus.OK,
+                data: mapIe,
+                messages:[]
+            } 
         }catch(error){
             throw ErrorManager.createSignatureError(error.message)
         }
     }
     
-    async deleteIieeById(id: number): Promise<IieeResponseDto> {
+    async deleteIieeById(id: number): Promise<IGenericResponse<IieeResponseDto>> {
         try {
             const responseIiee = await this.iieeRepository.deleteIieeById(id);
             if (!responseIiee) {
@@ -61,14 +76,21 @@ export class IieeImplService implements IieeService {
                     message: `IIEE with Id ${id} not found`
                 })
             }
-            return mapper.map(responseIiee, IieeEntity, IieeResponseDto);
+            const mapIe = mapper.map(responseIiee, IieeEntity, IieeResponseDto);
+            
+            return {
+                success: true,
+                code: HttpStatus.OK,
+                data: mapIe,
+                messages: []
+            } 
         
         } catch (error) {
             throw ErrorManager.createSignatureError(error.message)
         }
     }
     
-    async findIieeById(id: number): Promise<IieeResponseDto> {
+    async findIieeById(id: number): Promise<IGenericResponse<IieeResponseDto>> {
         try {
             const responseIiee = await this.iieeRepository.findIieeById(id);
             if (!responseIiee) {
@@ -77,7 +99,13 @@ export class IieeImplService implements IieeService {
                     message: `IIEE with Id ${id} not found`
                 })
             }
-            return mapper.map(responseIiee, IieeEntity, IieeResponseDto);
+            const mapIe = mapper.map(responseIiee, IieeEntity, IieeResponseDto);
+            return {
+                success: true,
+                code: HttpStatus.OK,
+                data: mapIe,
+                messages: []
+            } 
             
         } catch (error) {
             throw ErrorManager.createSignatureError(error.message)
@@ -94,7 +122,7 @@ export class IieeImplService implements IieeService {
         return iiees;
     }
 
-    async assignIieeToTicket(iieeId: number, ticketId: number): Promise<TicketResponseDto> {
+    async assignIieeToTicket(iieeId: number, ticketId: number): Promise<IGenericResponse<TicketResponseDto>> {
         try{
             const responseTicket = await this.ticketRepository.assignIieeToTicket(iieeId,ticketId);
             if(!responseTicket) {
@@ -104,9 +132,14 @@ export class IieeImplService implements IieeService {
                 })
             }
 
-            const ticket = mapper.map(responseTicket, TicketEntity, TicketResponseDto);
-            ticket.iieeId = iieeId;
-            return ticket;
+            const mapTicket = mapper.map(responseTicket, TicketEntity, TicketResponseDto);
+            mapTicket.iieeId = iieeId;
+            return {
+                success: true,
+                code: HttpStatus.OK,
+                data: mapTicket,
+                messages: []
+            }
         }catch(error){
             throw ErrorManager.createSignatureError(error.message)
         }

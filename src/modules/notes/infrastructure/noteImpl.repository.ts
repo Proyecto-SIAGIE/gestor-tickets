@@ -1,6 +1,6 @@
 
 import { NoteEntity } from "../domain/model/note.entity";
-import { NoteRepository } from "../domain/note.repository";
+import { NoteRepository } from "../domain/interface/note.repository";
 import { Repository } from "typeorm";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ErrorManager } from "src/utils/errors/error.manager";

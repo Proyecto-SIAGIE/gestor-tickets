@@ -1,9 +1,9 @@
 
 import { TicketRequestDto } from "src/modules/ticket/application/dto/ticketReq.dto";
 import { TicketResponseDto } from "src/modules/ticket/application/dto/ticketRes.dto";
-import { UserExternalRequestDto } from "../application/dto/userExternalReq.dto";
-import { UserExternalResponseDto } from "../application/dto/userExternalRes.dto";
-import { IGenericResponse, IPaginatedRequest, IPaginatedResponse } from "src/utils/interface/generic";
+import { UserExternalRequestDto } from "../../application/dto/userExternalReq.dto";
+import { UserExternalResponseDto } from "../../application/dto/userExternalRes.dto";
+import { IGenericResponse, IPaginatedRequest, IPaginatedResponse } from "src/utils/generic";
 
 export interface UserExternalService {
     registerUserExternal(user: UserExternalRequestDto): Promise<IGenericResponse<UserExternalResponseDto>>;

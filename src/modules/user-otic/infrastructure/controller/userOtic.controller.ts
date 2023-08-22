@@ -25,11 +25,11 @@ export class UserOticController {
         return await this.userService.registerUserOtic(createUser);
     }
 
-    @ApiOperation({ summary: 'Obtener la lista de User-Otic' })
+    /*@ApiOperation({ summary: 'Obtener la lista de User-Otic' })
     @Get()
     async listAllTickets(){
         return await this.userService.listAllUserOtics();
-    }
+    }*/
 
     @ApiOperation({ summary: 'Actualizar una User-Otic por Id' })
     @Patch(':id')

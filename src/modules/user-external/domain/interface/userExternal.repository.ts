@@ -1,6 +1,6 @@
 
 import { TicketEntity } from "src/modules/ticket/domain/model/ticket.entity";
-import { UserExternalEntity } from "./model/userExternal.entity";
+import { UserExternalEntity } from "../model/userExternal.entity";
 
 export interface userExternalRepository{
     createUserExternal(user: UserExternalEntity): Promise<UserExternalEntity>;

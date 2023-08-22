@@ -1,4 +1,4 @@
-import { FileEntity } from "./model/file.entity";
+import { FileEntity } from "../model/file.entity";
 
 export interface FileRepository {
     createFileByTicketId(ticketId: number, file: FileEntity): Promise<FileEntity>;

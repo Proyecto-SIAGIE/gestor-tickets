@@ -1,5 +1,5 @@
 import { InjectRepository } from "@nestjs/typeorm";
-import { FileRepository } from "../domain/file.repository";
+import { FileRepository } from "../domain/interface/file.repository";
 import { FileEntity } from "../domain/model/file.entity";
 import { Repository } from "typeorm";
 import { ErrorManager } from "src/utils/errors/error.manager";

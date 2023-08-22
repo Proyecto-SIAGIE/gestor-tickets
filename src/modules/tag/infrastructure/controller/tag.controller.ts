@@ -2,10 +2,11 @@
 https://docs.nestjs.com/controllers#controllers
 */
 
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { TagImplService } from '../../application/service/tagImpl.service';
 import { TagRequestDto } from '../../application/dto/tagReq.dto';
+import { IPaginatedRequest } from 'src/utils/generic';
 
 @ApiTags('tags')
 @Controller('tags')
@@ -44,8 +45,8 @@ export class TagController {
 
     @ApiOperation({ summary: 'Obtener los tickets asociados a un Tag (tag_id)' })
     @Get(':id/tickets')
-    async findTicketsByTagId(@Param('id', ParseIntPipe) id: number){
-        return await this.tagService.findTicketsByTagId(id);
+    async findTicketsByTagId(@Param('id', ParseIntPipe) id: number, @Query() filter: IPaginatedRequest ){
+        return await this.tagService.findTicketsByTagId(id, filter);
     }
 
     @ApiOperation({ summary: 'Asignar un Tag a un Ticket' })

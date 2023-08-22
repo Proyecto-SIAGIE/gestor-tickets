@@ -25,11 +25,11 @@ export class IieeController {
         return await this.iieeService.findIieeById(id);
     }
 
-    @ApiOperation({ summary: 'Obtener la lista de IIEE' })
+    /*@ApiOperation({ summary: 'Obtener la lista de IIEE' })
     @Get()
     async listAllIiees(){
         return await this.iieeService.listAllIiees();
-    }
+    }*/
 
     @ApiOperation({ summary: 'Actualizar una IIEE por Id' })
     @Patch(':id')

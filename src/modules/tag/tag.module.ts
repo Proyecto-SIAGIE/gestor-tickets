@@ -11,16 +11,19 @@ import { TagEntity } from './domain/model/tag.entity';
 import { TicketDetailEntity } from '../ticket-detail/domain/model/ticketDetail.entity';
 import { TicketEntity } from '../ticket/domain/model/ticket.entity';
 import { TicketDetailImplRepository } from '../ticket-detail/infrastructure/ticketDetailImpl.repository';
+import { TicketImplRepository } from '../ticket/infrastructure/ticketImpl.repository';
+import { IieeEntity } from '../iiee/domain/model/iiee.entity';
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([TagEntity]),
         TypeOrmModule.forFeature([TicketDetailEntity]),
-        TypeOrmModule.forFeature([TicketEntity])
+        TypeOrmModule.forFeature([TicketEntity]),
+        TypeOrmModule.forFeature([IieeEntity])
     ],
     controllers: [
         TagController, ],
     providers: [
-        TagImplService, TagImplRepository, TicketDetailImplRepository],
+        TagImplService, TagImplRepository, TicketDetailImplRepository, TicketImplRepository],
 })
 export class TagModule {}

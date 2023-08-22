@@ -1,5 +1,5 @@
 import { InjectRepository } from "@nestjs/typeorm";
-import { IieeRepository } from "../domain/iiee.repository";
+import { IieeRepository } from "../domain/interface/iiee.repository";
 import { IieeEntity } from "../domain/model/iiee.entity";
 import { Repository } from "typeorm";
 

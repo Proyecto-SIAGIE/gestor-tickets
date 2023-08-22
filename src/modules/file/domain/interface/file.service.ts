@@ -1,6 +1,6 @@
-import { IGenericResponse } from "src/utils/interface/generic";
-import { FileRequestDto } from "../application/dto/fileReq.dto";
-import { FileResponseDto } from "../application/dto/fileRes.dto";
+import { IGenericResponse } from "src/utils/generic";
+import { FileRequestDto } from "../../application/dto/fileReq.dto";
+import { FileResponseDto } from "../../application/dto/fileRes.dto";
 
 export interface FileService {
     //registerFile(file: FileRequestDto): Promise<FileResponseDto>;

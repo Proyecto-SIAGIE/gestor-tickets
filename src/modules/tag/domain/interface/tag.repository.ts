@@ -2,7 +2,7 @@ import { TicketEntity } from "src/modules/ticket/domain/model/ticket.entity";
 import { TagEntity } from "../model/tag.entity";
 import { TicketDetailEntity } from "src/modules/ticket-detail/domain/model/ticketDetail.entity";
 
-export interface ITagRepository {
+export interface TagRepository {
     createTag(tag: TagEntity): Promise<TagEntity>;
     updateTagById(id: number, tag: TagEntity): Promise<TagEntity>;
     deleteTagById(id: number): Promise<TagEntity>;

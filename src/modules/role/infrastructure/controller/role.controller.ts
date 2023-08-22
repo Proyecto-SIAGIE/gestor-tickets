@@ -7,7 +7,7 @@ import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { UserExternalImplService } from 'src/modules/user-external/application/service/userExternalImpl.service';
 import { RoleRequestDto } from '../../application/dto/roleReq.dto';
 import { RoleImplService } from '../../application/service/roleImpl.service';
-import { IPaginatedRequest, sortOrder } from 'src/utils/interface/generic';
+import { IPaginatedRequest, sortOrder } from 'src/utils/generic';
 
 
 @ApiTags('roles')
@@ -41,7 +41,7 @@ export class RoleController {
         return await this.userExternalService.unassignRoleToUserExternal(id, userId);
     }
 
-    @ApiOperation({ summary: 'Obtener la lista de User-Externals por Role Id' })
+    /*@ApiOperation({ summary: 'Obtener la lista de User-Externals por Role Id' })
     @ApiQuery({ name: 'page', type: Number, required: true })
     @ApiQuery({ name: 'size', type: Number, required: true })
     @ApiQuery({ name: 'sortBy', type: String, required: true })
@@ -49,7 +49,7 @@ export class RoleController {
     @Get(':id/user-externals')
     async listAllUsersByRoleId(@Param('id', ParseIntPipe) id: number, @Query() filter: IPaginatedRequest) {
         return await this.userExternalService.listUserExternalsByRoleId(id, filter);
-    }
+    }*/
 
     @ApiOperation({ summary: 'Obtener la lista de Roles' })
     @Get()

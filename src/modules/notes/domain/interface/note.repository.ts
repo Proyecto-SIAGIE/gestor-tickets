@@ -1,4 +1,4 @@
-import { NoteEntity } from "./model/note.entity";
+import { NoteEntity } from "../model/note.entity";
 
 export interface NoteRepository {
     createNoteByTicketId(ticketId: number, note: NoteEntity): Promise<NoteEntity>;

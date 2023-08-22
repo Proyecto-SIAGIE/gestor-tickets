@@ -1,4 +1,4 @@
-import { UserOticEntity } from "./model/userOtic.entity";
+import { UserOticEntity } from "../model/userOtic.entity";
 
 export interface UserOticRepository {
     createUserOtic(user: UserOticEntity): Promise<UserOticEntity>;

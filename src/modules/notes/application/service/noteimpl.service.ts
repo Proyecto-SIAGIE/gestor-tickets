@@ -2,7 +2,7 @@
 https://docs.nestjs.com/providers#services
 */
 
-import { Injectable } from "@nestjs/common";
+import { HttpStatus, Injectable } from "@nestjs/common";
 import { FileRequestDto } from "src/modules/file/application/dto/fileReq.dto";
 import { FileResponseDto } from "src/modules/file/application/dto/fileRes.dto";
 import { FileEntity } from "src/modules/file/domain/model/file.entity";
@@ -10,10 +10,11 @@ import { FileImplRepository } from "src/modules/file/infrastructure/fileImpl.rep
 import { ErrorManager } from "src/utils/errors/error.manager";
 import { mapper } from "src/utils/mapping/mapper";
 import { NoteEntity } from "../../domain/model/note.entity";
-import { NoteService } from "../../domain/note.service";
+import { NoteService } from "../../domain/interface/note.service";
 import { NoteImplRepository } from "../../infrastructure/noteImpl.repository";
 import { NoteRequestDto } from "../dto/noteReq.dto";
 import { NoteResponseDto } from "../dto/noteRes.dto";
+import { IGenericResponse } from "src/utils/generic";
 
 
 
@@ -32,12 +33,18 @@ export class NoteImplService implements NoteService {
         return files;
     }
     
-    async registerFileByNoteId(noteId: number, file: FileRequestDto): Promise<FileResponseDto> {
+    async registerFileByNoteId(noteId: number, file: FileRequestDto): Promise<IGenericResponse<FileResponseDto>> {
         try{
             const fileEntity = mapper.map(file, FileRequestDto, FileEntity);
             const responseFile = await this.fileRepository.createFileByNoteId(noteId, fileEntity);
            
-            return mapper.map(responseFile, FileEntity, FileResponseDto);
+            const mapFile = mapper.map(responseFile, FileEntity, FileResponseDto);
+            return {
+                success: true,
+                code: HttpStatus.OK,
+                data: mapFile,
+                messages: []
+            }
 
         }catch(error){
             throw ErrorManager.createSignatureError(error.message)
@@ -48,7 +55,7 @@ export class NoteImplService implements NoteService {
         
     }*/
 
-    async updateNoteById(id: number, noteUpdate: NoteRequestDto): Promise<NoteResponseDto> {
+    async updateNoteById(id: number, noteUpdate: NoteRequestDto): Promise<IGenericResponse<NoteResponseDto>> {
         try{
             const noteEntity = mapper.map(noteUpdate, NoteRequestDto, NoteEntity);
             const responseNote = await this.noteRepository.updateNoteById(id, noteEntity);
@@ -58,13 +65,20 @@ export class NoteImplService implements NoteService {
                     message: `Note with Id ${id} not found`
                 })
             }
-            return mapper.map(responseNote, NoteEntity, NoteResponseDto);
+            const mapNote = mapper.map(responseNote, NoteEntity, NoteResponseDto);
+            
+            return {
+                success: true,
+                code: HttpStatus.OK,
+                data: mapNote,
+                messages: []
+            }
         }catch(error){
             throw ErrorManager.createSignatureError(error.message)
         }
     }
     
-    async deleteNoteById(id: number): Promise<NoteResponseDto> {
+    async deleteNoteById(id: number): Promise<IGenericResponse<NoteResponseDto>> {
         try {
             const responseNote = await this.noteRepository.deleteNoteById(id);
             if (!responseNote) {
@@ -73,15 +87,21 @@ export class NoteImplService implements NoteService {
                     message: `Note with Id ${id} not found`
                 })
             }
-            const note = mapper.map(responseNote, NoteEntity, NoteResponseDto);
-            return note;
+            const mapNote = mapper.map(responseNote, NoteEntity, NoteResponseDto);
+            
+            return {
+                success: true,
+                code: HttpStatus.OK,
+                data: mapNote,
+                messages: []
+            }
 
         } catch (error) {
             throw ErrorManager.createSignatureError(error.message)
         }
     }
     
-    async findNoteById(id: number): Promise<NoteResponseDto> {
+    async findNoteById(id: number): Promise<IGenericResponse<NoteResponseDto>> {
         try {
             const responseNote = await this.noteRepository.findNoteById(id);
             if (!responseNote) {
@@ -90,9 +110,14 @@ export class NoteImplService implements NoteService {
                     message: `File with Id ${id} not found`
                 })
             }
-            const note = mapper.map(responseNote, NoteEntity, NoteResponseDto);
-            note.ticketId = responseNote.ticket.id;
-            return note;
+            const mapNote = mapper.map(responseNote, NoteEntity, NoteResponseDto);
+            mapNote.ticketId = responseNote.ticket.id;
+            return {
+                success: true,
+                code: HttpStatus.OK,
+                data: mapNote,
+                messages: []
+            }
 
         } catch (error) {
             throw ErrorManager.createSignatureError(error.message)

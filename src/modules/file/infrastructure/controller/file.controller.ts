@@ -18,11 +18,11 @@ export class FileController {
         return await this.fileService.findFileById(id);
     }
 
-    @ApiOperation({ summary: 'Obtener la lista de Files' })
+    /*@ApiOperation({ summary: 'Obtener la lista de Files' })
     @Get()
     async listAllFiles(){
         return await this.fileService.listAllFiles();
-    }
+    }*/
 
     @ApiOperation({ summary: 'Actualizar una File por Id' })
     @Patch(':id')

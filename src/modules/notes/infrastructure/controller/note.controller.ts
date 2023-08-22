@@ -33,11 +33,11 @@ export class NoteController {
         return await this.noteService.findNoteById(id);
     }
 
-    @ApiOperation({ summary: 'Obtener la lista de Notas' })
+    /*@ApiOperation({ summary: 'Obtener la lista de Notas' })
     @Get()
     async listAllNotes(){
         return await this.noteService.listAllNotes();
-    }
+    }*/
 
     @ApiOperation({ summary: 'Actualizar una Nota por Id' })
     @Patch(':id')
