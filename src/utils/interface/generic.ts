@@ -1,17 +1,20 @@
 export interface IGenericResponse<T> {
     success: boolean;
     data?: T;
-    code?: string;
+    code?: number;
     messages?: string[];
-    total?: string;
 }
 
-export interface IPaginatedRequest<T> {
-    filter?: T;
+export interface IPaginatedRequest {
     page: number;
     size: number;
-    source?: Array<any>;
-    order?: { field: string, type: string };
+    sortBy: string,
+    sortOrder: sortOrder
+}
+
+export enum sortOrder {
+    ASC = 'ASC',
+    DESC = 'DESC'
 }
 
 //con 2 campos: sortBy (campo), sortOrder (ASC o DESC)

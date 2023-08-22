@@ -2,11 +2,12 @@
 https://docs.nestjs.com/controllers#controllers
 */
 
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query } from '@nestjs/common';
+import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { UserExternalImplService } from 'src/modules/user-external/application/service/userExternalImpl.service';
 import { RoleRequestDto } from '../../application/dto/roleReq.dto';
 import { RoleImplService } from '../../application/service/roleImpl.service';
+import { IPaginatedRequest, sortOrder } from 'src/utils/interface/generic';
 
 
 @ApiTags('roles')
@@ -41,9 +42,13 @@ export class RoleController {
     }
 
     @ApiOperation({ summary: 'Obtener la lista de User-Externals por Role Id' })
+    @ApiQuery({ name: 'page', type: Number, required: true })
+    @ApiQuery({ name: 'size', type: Number, required: true })
+    @ApiQuery({ name: 'sortBy', type: String, required: true })
+    @ApiQuery({ name: 'sortOrder', enum: sortOrder, required: false })
     @Get(':id/user-externals')
-    async listAllUsersByRoleId(@Param('id', ParseIntPipe) id: number) {
-        return await this.userExternalService.listUserExternalsByRoleId(id);
+    async listAllUsersByRoleId(@Param('id', ParseIntPipe) id: number, @Query() filter: IPaginatedRequest) {
+        return await this.userExternalService.listUserExternalsByRoleId(id, filter);
     }
 
     @ApiOperation({ summary: 'Obtener la lista de Roles' })

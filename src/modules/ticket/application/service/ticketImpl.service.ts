@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { HttpStatus, Injectable } from "@nestjs/common";
 import { mapper } from "src/utils/mapping/mapper";
 import { TicketRequestDto } from "../dto/ticketReq.dto";
 import { ErrorManager } from "src/utils/errors/error.manager";
@@ -18,6 +18,7 @@ import { TicketEntity } from "../../domain/model/ticket.entity";
 import { TicketService } from "../../domain/ticket.service";
 import { TicketImplRepository } from "../../infrastructure/ticketImpl.repository";
 import { TicketResponseDto } from "../dto/ticketRes.dto";
+import { IGenericResponse } from "src/utils/interface/generic";
 
 
 @Injectable()
@@ -76,13 +77,19 @@ export class TicketImplService implements TicketService {
     
     
 
-    async registerTicket(ticket: TicketRequestDto): Promise<TicketResponseDto> {
+    async registerTicket(ticket: TicketRequestDto): Promise<IGenericResponse<TicketResponseDto>> {
         try {
             const ticketEntity = mapper.map(ticket, TicketRequestDto, TicketEntity);
             const responseTicket = await this.ticketRepository.createTicket(ticketEntity);
 
-            return mapper.map(responseTicket, TicketEntity, TicketResponseDto);
+            const mapTicket = mapper.map(responseTicket, TicketEntity, TicketResponseDto);
 
+            return {
+                success: true,
+                data: mapTicket,
+                code: HttpStatus.CREATED,
+                messages: ['Ticket successfull registered'],
+            }
         } catch (error) {
             throw ErrorManager.createSignatureError(error.message)
         }

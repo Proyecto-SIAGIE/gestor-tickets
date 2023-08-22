@@ -2,7 +2,7 @@
 https://docs.nestjs.com/providers#services
 */
 
-import { Injectable } from '@nestjs/common';
+import { HttpStatus, Injectable } from '@nestjs/common';
 import { FileRequestDto } from '../dto/fileReq.dto';
 import { FileResponseDto } from '../dto/fileRes.dto';
 import { mapper } from 'src/utils/mapping/mapper';
@@ -10,6 +10,7 @@ import { ErrorManager } from 'src/utils/errors/error.manager';
 import { FileService } from '../../domain/file.service';
 import { FileEntity } from '../../domain/model/file.entity';
 import { FileImplRepository } from '../../infrastructure/fileImpl.repository';
+import { IGenericResponse } from 'src/utils/interface/generic';
 
 
 
@@ -34,7 +35,7 @@ export class FileImplService implements FileService {
         throw new Error('Method not implemented.');
     }
     */
-    async updateFileById(id: number, fileUpdate: FileRequestDto): Promise<FileResponseDto> {
+    async updateFileById(id: number, fileUpdate: FileRequestDto): Promise<IGenericResponse<FileResponseDto>> {
         try{
             const fileEntity = mapper.map(fileUpdate, FileRequestDto, FileEntity);
             const responseFile = await this.fileRepository.updateFileById(id, fileEntity);
@@ -44,13 +45,20 @@ export class FileImplService implements FileService {
                     message: `File with Id ${id} not found`
                 })
             }
-            return mapper.map(responseFile, FileEntity, FileResponseDto);
+
+            const mapFile = mapper.map(responseFile, FileEntity, FileResponseDto);
+            return {
+                success: true,
+                data: mapFile,
+                messages: [''],
+                code: HttpStatus.ACCEPTED
+            }
         }catch(error){
             throw ErrorManager.createSignatureError(error.message)
         }
     }
     
-    async deleteFileById(id: number): Promise<FileResponseDto> {
+    async deleteFileById(id: number): Promise<IGenericResponse<FileResponseDto>> {
         try {
             const responseFile = await this.fileRepository.deleteFileById(id);
             if (!responseFile) {
@@ -59,15 +67,21 @@ export class FileImplService implements FileService {
                     message: `File with Id ${id} not found`
                 })
             }
-            const file = mapper.map(responseFile, FileEntity, FileResponseDto);
-            return file;
+            const mapFile = mapper.map(responseFile, FileEntity, FileResponseDto);
+            
+            return {
+                success: true,
+                data: mapFile,
+                messages: ['File successfull removed'],
+                code: HttpStatus.OK
+            };
 
         } catch (error) {
             throw ErrorManager.createSignatureError(error.message)
         }
     }
     
-    async findFileById(id: number): Promise<FileResponseDto> {
+    async findFileById(id: number): Promise<IGenericResponse<FileResponseDto>> {
         try {
             const responseFile = await this.fileRepository.findFileById(id);
             if (!responseFile) {
@@ -76,9 +90,15 @@ export class FileImplService implements FileService {
                     message: `File with Id ${id} not found`
                 })
             }
-            const file = mapper.map(responseFile, FileEntity, FileResponseDto);
-            file.ticketId = responseFile.ticket.id;
-            return file;
+            const mapFile = mapper.map(responseFile, FileEntity, FileResponseDto);
+            mapFile.ticketId = responseFile.ticket.id;
+
+            return {
+                success: true,
+                data: mapFile,
+                messages: ['File successfull founded'],
+                code: HttpStatus.OK
+            };
 
         } catch (error) {
             throw ErrorManager.createSignatureError(error.message)

@@ -17,6 +17,9 @@ export class UserExternalImplRepository implements userExternalRepository {
         private readonly ticketOrmRepository: Repository<TicketEntity>,
         ) { }
     
+    getOrmRepository() {
+        return this.userOrmRepository;
+    }
     
     async createTicketByRequesterUserId(userId: number, ticket: TicketEntity): Promise<TicketEntity> {
         const user = await this.findUserExternalById(userId);

@@ -7,10 +7,11 @@ import { TicketDetailRequestDto } from "src/modules/ticket-detail/application/dt
 import { TicketDetailResponseDto } from "src/modules/ticket-detail/application/dto/ticketDetailRes.dto";
 import { TicketRequestDto } from "../application/dto/ticketReq.dto";
 import { TicketResponseDto } from "../application/dto/ticketRes.dto";
+import { IGenericResponse } from "src/utils/interface/generic";
 
 
 export interface TicketService {
-    registerTicket(ticket: TicketRequestDto): Promise<TicketResponseDto>;
+    registerTicket(ticket: TicketRequestDto): Promise<IGenericResponse<TicketResponseDto>>;
     findTicketById(id: number):Promise<TicketResponseDto | null>;
     listAllTickets():Promise<TicketResponseDto[]>
 

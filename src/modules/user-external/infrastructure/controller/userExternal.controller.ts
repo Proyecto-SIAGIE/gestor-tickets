@@ -2,11 +2,12 @@
 https://docs.nestjs.com/controllers#controllers
 */
 
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Patch, Post, Query } from '@nestjs/common';
+import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { TicketRequestDto } from 'src/modules/ticket/application/dto/ticketReq.dto';
 import { UserExternalRequestDto } from '../../application/dto/userExternalReq.dto';
 import { UserExternalImplService } from '../../application/service/userExternalImpl.service';
+import { IPaginatedRequest, sortOrder} from 'src/utils/interface/generic';
 
 
 @ApiTags('user-externals')
@@ -34,9 +35,13 @@ export class UserExternalController {
     }
 
     @ApiOperation({ summary: 'Obtener la lista de User-Externals' })
+    @ApiQuery({ name: 'page', type: Number, required: true })
+    @ApiQuery({ name: 'size', type: Number, required: true })
+    @ApiQuery({ name: 'sortBy', type: String, required: true })
+    @ApiQuery({ name: 'sortOrder', enum: sortOrder, required: false })
     @Get()
-    async listAllUserExternals(){
-        return await this.userService.listAllUserExternals();
+    async listAllUserExternals(@Query() filter: IPaginatedRequest){
+        return await this.userService.listAllUserExternals(filter);
     }
 
     @ApiOperation({ summary: 'Actualizar un User-External por Id' })
