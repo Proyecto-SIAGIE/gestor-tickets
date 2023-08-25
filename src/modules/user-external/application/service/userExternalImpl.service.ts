@@ -18,6 +18,8 @@ import { IGenericResponse, IPaginatedRequest, IPaginatedResponse } from 'src/uti
 
 @Injectable()
 export class UserExternalImplService implements UserExternalService {
+    
+    
     constructor(private readonly userRepository: UserExternalImplRepository) { }
     
     async createTicketByRequesterUserId(userId: number, ticket: TicketRequestDto): Promise<IGenericResponse<TicketResponseDto>> {
@@ -204,6 +206,28 @@ export class UserExternalImplService implements UserExternalService {
             throw ErrorManager.createSignatureError(error.message)
         }
 
+    }
+
+    async findUserExternalByPassportId(passportId: number): Promise<IGenericResponse<UserExternalResponseDto>> {
+        try {
+            const responseUser = await this.userRepository.findUserExternalByPassportId(passportId);
+            if (!responseUser) {
+                throw new ErrorManager({
+                    type: 'NOT_FOUND',
+                    message: `User-External with passportId ${passportId} not found`
+                })
+            }
+            const mapUser = mapper.map(responseUser, UserExternalEntity, UserExternalResponseDto);
+            return {
+                success: true,
+                data: mapUser,
+                code: HttpStatus.OK,
+                messages: ['Successfully found user']
+            }
+
+        } catch (error) {
+            throw ErrorManager.createSignatureError(error.message)
+        }
     }
 
 

@@ -5,6 +5,7 @@ import {
   IsNotEmpty,
   IsNumber,
   IsNumberString,
+  IsPositive,
   IsString,
   Min,
   MinLength,
@@ -12,6 +13,12 @@ import {
 } from 'class-validator';
 
 export class UserExternalRequestDto {
+
+  @ApiProperty()
+  @IsPositive()
+  @AutoMap()
+  passportUserId: number;
+
   @ApiProperty()
   @IsNotEmpty()
   @AutoMap()

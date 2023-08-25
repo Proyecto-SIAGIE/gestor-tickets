@@ -21,6 +21,12 @@ export class UserExternalController {
         return await this.userService.findUserExternalById(id);
     }
 
+    @ApiOperation({ summary: 'Obtener un User-External por PassportId' })
+    @Get(':passportId')
+    async findOneUserByPassportId(@Param('passportId',ParseIntPipe) passportId: number){
+        return await this.userService.findUserExternalByPassportId(passportId);
+    }
+
     @ApiOperation({ summary: 'Registrar un User-External' })
     @Post()
     async registerUser(@Body() createUser: UserExternalRequestDto){

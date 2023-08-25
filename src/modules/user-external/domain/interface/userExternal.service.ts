@@ -10,6 +10,7 @@ export interface UserExternalService {
     updateUserExternalById(id: number, userRequest: UserExternalRequestDto): Promise<IGenericResponse<UserExternalResponseDto>>;
     deleteUserExtenalById(id: number): Promise<IGenericResponse<UserExternalResponseDto>>;
     findUserExternalById(id: number): Promise<IGenericResponse<UserExternalResponseDto>>;
+    findUserExternalByPassportId(id: number): Promise<IGenericResponse<UserExternalResponseDto>>;
     listAllUserExternals(filter: IPaginatedRequest): Promise<IPaginatedResponse<UserExternalResponseDto>>;
     
     assignRoleToUserExternal(roleId: number, userId: number): Promise<IGenericResponse<UserExternalResponseDto>>;

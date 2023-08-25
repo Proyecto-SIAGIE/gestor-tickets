@@ -8,6 +8,7 @@ import { TicketEntity } from "src/modules/ticket/domain/model/ticket.entity";
 
 
 export class UserExternalImplRepository implements userExternalRepository {
+    
     constructor(
         @InjectRepository(UserExternalEntity)
         private readonly userOrmRepository: Repository<UserExternalEntity>,
@@ -107,6 +108,11 @@ export class UserExternalImplRepository implements userExternalRepository {
 
     async findUserExternalById(id: number): Promise<UserExternalEntity> {
         const user = this.userOrmRepository.findOneBy({ id: id });
+        return user;
+    }
+
+    findUserExternalByPassportId(passportId: number): Promise<UserExternalEntity> {
+        const user = this.userOrmRepository.findOneBy({ passportUserId: passportId });
         return user;
     }
 

@@ -11,6 +11,12 @@ export class UserExternalEntity{
     id: number;
 
     @AutoMap()
+    @Column('int',
+    {name: 'passport_user_id'}
+    )
+    passportUserId: number;
+
+    @AutoMap()
     @Column('varchar',{
         unique: true
     })

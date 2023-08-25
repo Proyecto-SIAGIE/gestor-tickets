@@ -73,7 +73,7 @@ export class TicketController {
         return await this.ticketService.registerTicketDetailByTicketId(id,createTicketDetail);
     }
 
-    @ApiOperation({ summary: 'Enviar su ticket a su registro en GLPI' })
+    @ApiOperation({ summary: 'Enviar ticket a su registro en GLPI' })
     @ApiConsumes('multipart/form-data') // Indica que se acepta la carga de archivos en la solicitud
     @ApiBody({ type: TicketGlpiReq })
     @UseInterceptors(FilesInterceptor('files'))

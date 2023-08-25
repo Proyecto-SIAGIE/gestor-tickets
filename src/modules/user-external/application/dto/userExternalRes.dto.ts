@@ -8,6 +8,9 @@ export class UserExternalResponseDto {
     id: number;
 
     @AutoMap()
+    passportUserId: number;
+
+    @AutoMap()
     username: string;
 
     @AutoMap()
