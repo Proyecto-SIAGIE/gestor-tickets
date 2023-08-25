@@ -24,5 +24,5 @@ export interface TicketService {
     
     registerTicketDetailByTicketId(ticketId: number, ticketDetail: TicketDetailRequestDto): Promise<IGenericResponse<TicketDetailResponseDto>>;
     findTicketDetailByTicketId(ticketId: number): Promise<IGenericResponse<TicketDetailResponseDto>>;
-    sendTicketToGlpi(content: TicketGlpiReq, files: Express.Multer.File[]): Promise<any>;
+    sendTicketToAPIGlpi(content: TicketGlpiReq, files: Express.Multer.File[]): Promise<any>;
 }

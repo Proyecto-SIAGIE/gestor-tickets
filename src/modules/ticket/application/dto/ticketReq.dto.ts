@@ -16,13 +16,12 @@ export class TicketRequestDto {
     @AutoMap()
     description: string;
 
-    @ApiProperty()
+    //@ApiProperty()
     //@IsString()
     /*@MinLength(8, {
         message: 'The DNI must have 8 digits',
     })*/
-    @AutoMap()
-    studentDNI: string;
+   
 
     @ApiProperty()
     @IsInt()

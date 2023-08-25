@@ -79,7 +79,7 @@ export class TicketController {
     @UseInterceptors(FilesInterceptor('files'))
     @Post('TicketToGLPI')
     async registerTicketToGlpi(@Body() content: TicketGlpiReq, @UploadedFiles() files: Express.Multer.File[]){
-        return await this.ticketService.sendTicketToGlpi(content, files);
+        return await this.ticketService.sendTicketToAPIGlpi(content, files);
     }
 
     @ApiOperation({ summary: 'Actualizar el Ticket-Detail de un Ticket' })

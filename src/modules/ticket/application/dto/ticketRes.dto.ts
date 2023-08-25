@@ -9,8 +9,7 @@ export class TicketResponseDto {
     @AutoMap()
     description: string;
 
-    @AutoMap()
-    studentDNI: string;
+    
 
     @AutoMap()
     categoryId: number;

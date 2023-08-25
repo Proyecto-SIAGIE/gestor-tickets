@@ -250,7 +250,7 @@ export class TicketImplService implements TicketService {
         }
     }
 
-    async sendTicketToGlpi(content: TicketGlpiReq, files: Express.Multer.File[]): Promise<any> {
+    async sendTicketToAPIGlpi(content: TicketGlpiReq, files: Express.Multer.File[]): Promise<any> {
         try{
             const requestConfig = {
                 headers: {
@@ -263,39 +263,26 @@ export class TicketImplService implements TicketService {
             const ticket = await this.ticketRepository.findTicketById(content.ticketId);
             const iiee = await this.iieeRepository.findIieeByModularCode(content.iieeModularCode);
             
-            const ticketSimple = {
-                id: ticket.id,
-                description: ticket.description,
-                studentDNI: ticket.studentDNI,
-                categoryId: ticket.categoryId,
-                subcategory1Id: ticket.subcategory1Id,
-                subcategory2Id: ticket.subcategory2Id,
-                subcategory3Id: ticket.subcategory3Id,
-            };
-
-            const ticketDetailSimple = {
-                ticket: null,
-                ...ticket.ticketDetail,
-            }
-                
-
-            const thisForm = new FormData();
-            thisForm.append('userRequest', JSON.stringify(ticketSimple), { contentType: 'application/json' });
-            thisForm.append('ticketDetail', JSON.stringify(ticketSimple), { contentType: 'application/json' });
            
-            thisForm.append('ticket', JSON.stringify(ticketSimple), { contentType: 'application/json' });
-            thisForm.append('iiee', JSON.stringify(ticketSimple), { contentType: 'application/json' });
+            const thisForm = new FormData();
+            thisForm.append('userRequest', JSON.stringify(user), { contentType: 'application/json' });
+            thisForm.append('ticketDetail', JSON.stringify(ticket.ticketDetail), { contentType: 'application/json' });
+            thisForm.append('ticket', JSON.stringify(ticket), { contentType: 'application/json' });
+            thisForm.append('iiee', JSON.stringify(iiee), { contentType: 'application/json' });
+
+           // console.log(files);
 
             for (let i = 0; i < files.length; i++) {
                 const el = files[i];
-                thisForm.append(`files[]`, el.buffer, el.originalname);
+                thisForm.append(`files`, el.buffer, el.originalname);
             }
-
-            const response = await axios.post(`${process.env.MSA_GLPI_URL}/createTicketWithFiles`, thisForm, requestConfig);
-            console.log(response)
-            return response;
+            //console.log(thisForm);
+            const response = await axios.post(`${process.env.MSA_GLPI_URL}/tickets`, thisForm, requestConfig);
+            //console.log(response);
+            //console.log(response)
+            return response.data;
         }catch(error){
-            console.log(error);
+            //console.log(error);
             throw ErrorManager.createSignatureError(error.message)
         }
     }

@@ -20,12 +20,6 @@ export class TicketEntity {
     })
     description: string;
 
-    @AutoMap()
-    @Column('varchar',{
-        length: 8,
-        name: 'student_dni'
-    })
-    studentDNI: string;
 
     @AutoMap()
     @Column('int',{

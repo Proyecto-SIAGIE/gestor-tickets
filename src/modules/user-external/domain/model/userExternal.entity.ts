@@ -12,7 +12,7 @@ export class UserExternalEntity{
 
     @AutoMap()
     @Column('int',
-    {name: 'passport_user_id'}
+    {name: 'passport_user_id', unique: true}
     )
     passportUserId: number;
 
