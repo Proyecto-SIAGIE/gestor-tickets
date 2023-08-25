@@ -1,17 +1,10 @@
-FROM node:18-alpine
-
-WORKDIR /user/src/app
- 
+FROM node:16.13.2
+WORKDIR /app
 COPY . .
 
-RUN npm install -g @nestjs/cli
+EXPOSE 3031
 
-RUN npm ci --omit=dev
-
+RUN npm install
+RUN npm install dotenv
 RUN npm run build
- 
-USER node
-
-EXPOSE 4201
- 
-CMD ["npm", "run", "start:prod"]
+CMD ["npm", "run", "start:prod"] 
