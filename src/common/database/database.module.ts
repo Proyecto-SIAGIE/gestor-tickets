@@ -20,7 +20,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
                 instanceName: 'MSSQL' //quitar
             },
             autoLoadEntities: true,
-            synchronize: true,
+            synchronize: false, //False in production
             options: {
                 trustServerCertificate: true,
             },
