@@ -26,6 +26,20 @@ export class IieeImplService implements IieeService {
     
     async registerIiee(iiee: IieeRequestDto): Promise<IGenericResponse<IieeResponseDto>> {
         try {
+
+            const existedIE = await this.iieeRepository.findIieeByModularCode(iiee.modularCode);
+            if(existedIE){
+                const mapExisted = mapper.map(existedIE, IieeEntity, IieeResponseDto);
+                
+                return {
+                    success: true,
+                    code: HttpStatus.CREATED,
+                    data: mapExisted,
+                    messages:['IIEE is already registered']
+                }
+            }
+
+
             const iieeEntity = mapper.map(iiee, IieeRequestDto, IieeEntity);
 
             const responseIiee = await this.iieeRepository.createIiee(iieeEntity);
@@ -34,9 +48,9 @@ export class IieeImplService implements IieeService {
 
             return {
                 success: true,
-                code: HttpStatus.OK,
+                code: HttpStatus.CREATED,
                 data: mapIe,
-                messages:[]
+                messages:["Successfully registered IIEE"]
             }
 
         } catch (error) {

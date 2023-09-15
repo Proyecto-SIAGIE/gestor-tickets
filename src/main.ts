@@ -13,7 +13,7 @@ resourceToModel();
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   //app.enableCors();
-  app.enableCors({ origin: process.env.CORS_ORIGIN_URL != undefined ? process.env.CORS_ORIGIN_URL : "*" });
+  app.enableCors({ });
   
   app.useGlobalPipes(new ValidationPipe({
     disableErrorMessages: false,
@@ -37,7 +37,7 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('documentation', app, document);
 
   await app.listen(+process.env.PORT);
   console.log(`Application is running on: ${await app.getUrl()}`)

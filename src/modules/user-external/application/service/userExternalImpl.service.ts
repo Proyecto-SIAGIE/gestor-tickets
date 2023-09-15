@@ -121,6 +121,18 @@ export class UserExternalImplService implements UserExternalService {
 
     async registerUserExternal(user: UserExternalRequestDto): Promise<IGenericResponse<UserExternalResponseDto>> {
         try {
+
+            const existedUser = await this.userRepository.findUserExternalByPassportId(user.passportUserId);
+            if(existedUser){
+                const mapExisted = mapper.map(existedUser, UserExternalEntity, UserExternalResponseDto);
+                return {
+                    success: true,
+                    code: HttpStatus.OK,
+                    data: mapExisted,
+                    messages: ['User is already registered']              
+                }
+            }
+
             const userEntity = mapper.map(user, UserExternalRequestDto, UserExternalEntity);
             const responseUser = await this.userRepository.createUserExternal(userEntity);
 

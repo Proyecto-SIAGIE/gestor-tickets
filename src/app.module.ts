@@ -18,9 +18,17 @@ import { UserOticModule } from './modules/user-otic/userotic.module';
 import { DatabaseModule } from './common/database/database.module';
 import { ApiTokenCheckMiddleware } from './common/middleware/apitokencheck.middleware';
 import { ThrottlerModule } from '@nestjs/throttler';
+import { ApiPadronModule } from './modules/api-padron/api-padron.module';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    ThrottlerModule.forRoot({
+      ttl: +process.env.THROTTLER_MAX_SECONDS,
+      limit: +process.env.THROTTLER_MAX_CONSULTS
+    }),
+    DatabaseModule,
+    ApiPadronModule,
     TagModule,
     TickeDetailModule,
     IieeModule,
@@ -28,12 +36,6 @@ import { ThrottlerModule } from '@nestjs/throttler';
     FileModule,
     UserOticModule,
     UserExternalModule,
-    ConfigModule.forRoot({ isGlobal: true }),
-    ThrottlerModule.forRoot({
-      ttl: +process.env.THROTTLER_MAX_SECONDS,
-      limit: +process.env.THROTTLER_MAX_CONSULTS
-    }),
-    DatabaseModule,
     TicketModule,
     RoleModule,
   ],

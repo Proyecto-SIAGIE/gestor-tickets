@@ -25,6 +25,7 @@ import * as FormData from 'form-data';
 import { UserExternalImplRepository } from "src/modules/user-external/infrastructure/userExternalImpl.repository";
 import { IieeImplRepository } from "src/modules/iiee/infrastructure/iieeImpl.repository";
 import axios from "axios";
+import { getKeyByValue } from "src/utils/functions/generic-functions";
 
 
 @Injectable()
@@ -44,6 +45,25 @@ export class TicketImplService implements TicketService {
             const responseNote = await this.noteRepository.createNoteByTicketId(ticketId, noteEntity);
            
             const mapNote = mapper.map(responseNote, NoteEntity, NoteResponseDto);
+
+            const requestConfig = {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+            };
+
+            const glpiFollowup = {
+                content: note.comment,
+                is_private: note.isPrivate
+              }
+
+        
+            const response = await axios.post(`${process.env.MSA_GLPI_URL}/tickets/${ticketId}/ITILFollowup`, glpiFollowup, requestConfig);
+
+            if(!response.data.success){
+                throw ErrorManager.createSignatureError(response.data);
+            }
 
             return {
                 success: true,
@@ -271,18 +291,46 @@ export class TicketImplService implements TicketService {
             thisForm.append('iiee', JSON.stringify(iiee), { contentType: 'application/json' });
 
            // console.log(files);
+           //let filesToRegister
 
             for (let i = 0; i < files.length; i++) {
                 const el = files[i];
                 thisForm.append(`files`, el.buffer, el.originalname);
+                //console.log(el.originalname);
             }
             //console.log(thisForm);
             const response = await axios.post(`${process.env.MSA_GLPI_URL}/tickets`, thisForm, requestConfig);
+
+            const {messages} = response.data;
+
+            for (let i = 0; i < messages.length; i++) {
+                
+                const file: FileEntity = {
+                    date: new Date(),
+                    name: messages[i].filename,
+                    path: `${process.env.MSA_GLPI_URL}/document/${messages[i].id}/download`,
+                    size: messages[i].filesize,
+                    note: null,
+                    ticket: null,
+                    id: null
+                }
+                await this.fileRepository.createFileByTicketId(ticket.id,file);
+                //console.log(el.originalname);
+            }
+
             //console.log(response);
             //console.log(response)
             return response.data;
         }catch(error){
             //console.log(error);
+            if (error.code == 'ECONNREFUSED'){
+                throw ErrorManager.createSignatureError(`SERVICE_UNAVAILABLE :: Failed to connect to microservice 'glpi-manager' on port ${error.port}`);
+            }
+            
+            if (error.response.data){
+                throw ErrorManager.createSignatureError(`${getKeyByValue(HttpStatus,error.response.status)} :: ${error.response.data.message}`);
+            }
+
             throw ErrorManager.createSignatureError(error.message)
         }
     }
