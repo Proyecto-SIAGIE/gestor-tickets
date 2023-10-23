@@ -12,8 +12,44 @@ import { parseXmlToJson, transformResponse } from "src/utils/functions/xml2json"
 
 @Injectable()
 export class ApiPadronImplService implements ApiPadronService {
+    
 
     constructor(private jwtService: JwtService) { }
+
+    async getInfoIeByModularCode(modularCode: string, anexo: string) {
+        const token = await this.generateBearerToken();
+
+        try{
+            const requestConfig = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+                data: 
+                {   
+                    codigo_modular: modularCode,
+                    anexo: anexo
+                }
+            };
+
+            const response = await axios.get(`${process.env.API_PADRON_URL}/siagie-materiales/ObtenerPadron`, requestConfig);
+            //console.log(response);
+            return response.data;
+
+        }catch(error){
+            console.log(error);
+            if (error.code == 'ECONNREFUSED'){
+                throw ErrorManager.createSignatureError(`SERVICE_UNAVAILABLE :: Failed to connect to microservice 'api-padron' on port ${error.port}`);
+            }
+            
+            if (error.response.data){
+                throw ErrorManager.createSignatureError(`${getKeyByValue(HttpStatus,error.response.status)} :: ${error.response.data.message}`);
+            }
+
+            throw ErrorManager.createSignatureError(error.message)
+        }
+    }
     
     async listIIEEByDREAndUgel(dreCode: string, ugelCode: string, ieDto: IIEEPadronDto) {
         const token = await this.generateBearerToken();

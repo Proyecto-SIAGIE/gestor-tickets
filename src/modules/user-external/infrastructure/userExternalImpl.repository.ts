@@ -111,9 +111,11 @@ export class UserExternalImplRepository implements userExternalRepository {
         return user;
     }
 
-    findUserExternalByPassportId(passportId: number): Promise<UserExternalEntity> {
-        const user = this.userOrmRepository.findOneBy({ passportUserId: passportId });
-        return user;
+    async findUserExternalByPassportId(passportId: number): Promise<UserExternalEntity> {
+        return await this.userOrmRepository.createQueryBuilder('user')
+      .where('user.passportUserId = :passportId', { passportId })
+      .leftJoinAndSelect('user.role', 'role')
+      .getOne();
     }
 
     async listAllUserExternals(): Promise<UserExternalEntity[]> {

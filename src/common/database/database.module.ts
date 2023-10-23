@@ -16,9 +16,9 @@ import { TypeOrmModule } from '@nestjs/typeorm';
             database: process.env.DB_NAME,
             username: process.env.DB_USERNAME,
             password: process.env.DB_PASSWORD,
-            extra: {
+            /*extra: {
                 instanceName: 'MSSQL' //quitar, solo lo necesito en mi pc minedu
-            },
+            },*/
             autoLoadEntities: true,
             synchronize: true, //False in production
             options: {

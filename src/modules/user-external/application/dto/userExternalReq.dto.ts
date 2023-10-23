@@ -5,6 +5,7 @@ import {
   IsNotEmpty,
   IsNumber,
   IsNumberString,
+  IsOptional,
   IsPositive,
   IsString,
   Min,
@@ -57,6 +58,7 @@ export class UserExternalRequestDto {
   phone: string;
 
   @ApiProperty()
+  @IsOptional()
   @IsNumberString()
   @AutoMap()
   phoneExt: string;

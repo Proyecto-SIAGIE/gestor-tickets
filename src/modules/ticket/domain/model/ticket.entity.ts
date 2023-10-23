@@ -35,13 +35,15 @@ export class TicketEntity {
 
     @AutoMap()
     @Column('int',{
-        name: 'subcategory2_id'
+        name: 'subcategory2_id',
+        nullable: true
     })
     subcategory2Id: number;
 
     @AutoMap()
     @Column('int',{
-        name: 'subcategory3_id'
+        name: 'subcategory3_id',
+        nullable: true
     })
     subcategory3Id: number;
 

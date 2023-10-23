@@ -1,6 +1,6 @@
 import { AutoMap } from "@automapper/classes";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsDateString, IsNotEmpty, IsNumber, IsPositive, isNotEmpty } from "class-validator";
+import { IsDateString, IsNotEmpty, IsNumber, IsOptional, IsPositive, isNotEmpty } from "class-validator";
 
 export class TicketDetailRequestDto {
     
@@ -26,6 +26,7 @@ export class TicketDetailRequestDto {
     assignedTechName: string;
 
     @ApiProperty()
+    @IsOptional()
     @AutoMap()
     solveDate: Date;
 

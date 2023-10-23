@@ -2,6 +2,7 @@ import { AutoMap } from "@automapper/classes";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsInt,
     IsNotEmpty,
+    IsOptional,
     IsPositive,
     IsString,
     Matches,
@@ -37,13 +38,13 @@ export class TicketRequestDto {
 
     @ApiProperty()
     @IsInt()
-    @IsPositive()
+    @IsOptional()
     @AutoMap()
     subcategory2Id: number;
 
     @ApiProperty()
     @IsInt()
-    @IsPositive()
+    @IsOptional()
     @AutoMap()
     subcategory3Id: number;
 

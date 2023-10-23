@@ -327,11 +327,14 @@ export class TicketImplService implements TicketService {
                 throw ErrorManager.createSignatureError(`SERVICE_UNAVAILABLE :: Failed to connect to microservice 'glpi-manager' on port ${error.port}`);
             }
             
-            if (error.response.data){
+            else if (error.response?.data){
                 throw ErrorManager.createSignatureError(`${getKeyByValue(HttpStatus,error.response.status)} :: ${error.response.data.message}`);
             }
 
-            throw ErrorManager.createSignatureError(error.message)
+            else{
+                throw ErrorManager.createSignatureError(error.message)
+            }
+
         }
     }
     

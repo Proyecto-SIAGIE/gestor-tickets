@@ -24,4 +24,10 @@ export class ApiPadronController {
     async getAllIEByParams(@Param('dreCode') dreCode: string, @Param('ugelCode') ugelCode: string, @Query() iieePadron: IIEEPadronDto ){
         return await this.apiPadronService.listIIEEByDREAndUgel(dreCode, ugelCode, iieePadron);
     }
+
+    @ApiQuery({name: 'anexo', type: String, required: true})
+    @Get('IE/:modularCode')
+    async getInfoIE(@Param('modularCode') modularCode: string, @Query('anexo') anexo: string ){
+        return await this.apiPadronService.getInfoIeByModularCode(modularCode, anexo);
+    }
 }

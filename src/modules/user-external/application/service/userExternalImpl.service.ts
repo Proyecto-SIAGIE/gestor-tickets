@@ -124,12 +124,28 @@ export class UserExternalImplService implements UserExternalService {
 
             const existedUser = await this.userRepository.findUserExternalByPassportId(user.passportUserId);
             if(existedUser){
+
+                //Si existe solo actualizamos los datos actualizables
+                user.dni = undefined;
+                user.lastName = undefined;
+                user.name = undefined;
+                user.passportUserId = undefined;
+                user.username = undefined;
+                ////////////////////
+                const updateOnly = await this.updateUserExternalById(existedUser.id, user);
+
                 const mapExisted = mapper.map(existedUser, UserExternalEntity, UserExternalResponseDto);
+                mapExisted.email = updateOnly.data.email;
+                mapExisted.phone = updateOnly.data.phone;
+                mapExisted.phoneExt = updateOnly.data.phoneExt;
+                mapExisted.id = existedUser.id;
+                mapExisted.roleId = existedUser.role?.id;
+
                 return {
                     success: true,
                     code: HttpStatus.OK,
                     data: mapExisted,
-                    messages: ['User is already registered']              
+                    messages: ['User is already registered. Email, phone and anexo was updated.']              
                 }
             }
 
@@ -146,6 +162,7 @@ export class UserExternalImplService implements UserExternalService {
             }
 
         } catch (error) {
+            console.log(error);
             throw ErrorManager.createSignatureError(error.message)
         }
     }

@@ -19,6 +19,7 @@ import { DatabaseModule } from './common/database/database.module';
 import { ApiTokenCheckMiddleware } from './common/middleware/apitokencheck.middleware';
 import { ThrottlerModule } from '@nestjs/throttler';
 import { ApiPadronModule } from './modules/api-padron/api-padron.module';
+import { CaptchaModule } from './modules/captcha/captcha.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { ApiPadronModule } from './modules/api-padron/api-padron.module';
     UserExternalModule,
     TicketModule,
     RoleModule,
+    CaptchaModule
   ],
   controllers: [],
   providers: [],

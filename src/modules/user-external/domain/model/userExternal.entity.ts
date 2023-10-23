@@ -53,7 +53,8 @@ export class UserExternalEntity{
 
     @AutoMap()
     @Column('varchar',{
-        name: 'phone_ext'
+        name: 'phone_ext',
+        nullable: true
     })
     phoneExt: string;
 
